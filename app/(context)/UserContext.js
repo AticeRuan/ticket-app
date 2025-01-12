@@ -1,6 +1,6 @@
 'use client'
 import { createContext, useContext, useReducer, useEffect } from 'react'
-import { fetchWithAuth } from '../utils/fetchWithAuth'
+import { fetchWithAuth } from '../(utils)/fetchWithAuth'
 import jwt from 'jsonwebtoken'
 
 // Initial state

@@ -1,54 +1,59 @@
 'use client'
-import React from 'react'
-import Link from 'next/link'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faHome,
-  faFile,
-  faPortrait,
-  faSignOut,
-} from '@fortawesome/free-solid-svg-icons'
+import React, { useState } from 'react'
 import { useUserContext } from '../(context)/UserContext'
-const Nav = () => {
-  const { user, isAuthenticated, logout } = useUserContext()
-  console.log(isAuthenticated)
-  return (
-    <nav className="flex justify-between bg-nav p-4">
-      <div className="flex items-center space-x-4">
-        <Link href="/">
-          <FontAwesomeIcon icon={faHome} className="icon" />
-        </Link>
+import { navlinks, icons } from '../(utils)/constants'
+import NavButton from './common/NavButton'
+import { usePathname } from 'next/navigation'
+import CreateButton from './common/CreateButton'
 
-        <Link href="/project">
-          <FontAwesomeIcon icon={faFile} className="icon" />
-        </Link>
-        <Link href="/users">
-          <FontAwesomeIcon icon={faPortrait} className="icon" />
-        </Link>
+const Nav = () => {
+  const { logout } = useUserContext()
+  const [collapsed, setCollapsed] = useState(false)
+  const pathname = usePathname()
+  console.log(navlinks)
+
+  return (
+    <nav
+      className={`flex h-full ${
+        collapsed ? 'px-[30px]' : 'px-[46px]'
+      } pt-[140px] bg-chill-black  flex-col gap-[100px] relative items-center transition-all duration-300`}
+    >
+      <CreateButton collapse={collapsed} text="Create new ticket" />
+      <div className="flex items-center justify-center flex-col gap-[40px]">
+        {navlinks.map((link) => {
+          const IconComponent = icons[link.icon] || null
+          return (
+            <NavButton
+              key={link.id}
+              text={link.name}
+              url={link.url}
+              active={pathname == link.url}
+              collapse={collapsed}
+              icon={IconComponent}
+              iconColor={pathname == link.url ? '#E65F2B' : 'white'}
+            />
+          )
+        })}
       </div>
-      {isAuthenticated ? (
-        <>
-          <p className="text-default-text">{user?.email}</p>
-          <button
-            onClick={logout}
-            className="text-default-text hover:text-gray-300"
-          >
-            <FontAwesomeIcon icon={faSignOut} className="icon" />
-          </button>
-        </>
-      ) : (
-        <>
-          <Link href="/login" className="text-default-text hover:text-gray-300">
-            Login
-          </Link>
-          <Link
-            href="/sign-up"
-            className="text-default-text hover:text-gray-300"
-          >
-            Sign Up
-          </Link>
-        </>
-      )}
+      <button
+        className="w-[30px] h-[30px] flex items-center justify-center bg-chill-white rounded-full shadow-lg absolute top-[30px] -right-[15px]"
+        onClick={() => setCollapsed(!collapsed)}
+      >
+        <span
+          className="w-[20px] h-[20px] "
+          style={{ transform: collapsed ? 'rotate(180deg)' : '' }}
+        >
+          {icons.BackIcon({ color: 'black' })}
+        </span>
+      </button>
+      <button
+        className={`w-[48px] h-[48px] flex items-center justify-center rounded-full bg-chill-orange mt-[50px] hover:opacity-75 active:scale-75 absolute bottom-[50px]`}
+        onClick={logout}
+      >
+        <span className="w-[34px] h-[34px] rounded-full p-[5px] ">
+          {icons.ShutdownIcon({ color: 'white' })}
+        </span>
+      </button>
     </nav>
   )
 }

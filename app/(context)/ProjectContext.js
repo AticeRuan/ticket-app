@@ -1,6 +1,6 @@
 'use client'
 import { createContext, useContext, useReducer } from 'react'
-import { fetchWithAuth } from '../utils/fetchWithAuth'
+import { fetchWithAuth } from '../(utils)/fetchWithAuth'
 // Initial state
 const initialState = {
   projects: [],

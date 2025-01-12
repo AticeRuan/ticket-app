@@ -72,7 +72,6 @@ export const SignupForm = () => {
     name: '',
     email: '',
     password: '',
-    role: 'user',
   })
   const [secretKey, setSecretKey] = useState('')
 

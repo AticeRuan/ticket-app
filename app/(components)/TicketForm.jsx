@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTicketContext } from '../(context)/TicketContext'
 import { useProjectContext } from '../(context)/ProjectContext'
-import { category } from '../utils/constants'
+import { category } from '../(utils)/constants'
 
 const TicketForm = ({ ticket = {}, onClose }) => {
   const { loading, error, createTicket, updateTicket } = useTicketContext()
