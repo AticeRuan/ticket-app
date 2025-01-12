@@ -1,137 +1,195 @@
-'use client'
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from 'react'
+import { useTicketContext } from '../(context)/TicketContext'
+import { useProjectContext } from '../(context)/ProjectContext'
+import { category } from '../utils/constants'
 
-const TicketForm = ({ticket}) => {
+const TicketForm = ({ ticket = {}, onClose }) => {
+  const { loading, error, createTicket, updateTicket } = useTicketContext()
+  const { projects, loading: loadingProject } = useProjectContext()
 
-  const EDITMODE=ticket._id==="new"?false:true;
+  const EDITMODE = ticket?._id && ticket._id !== 'new'
+
   const startingTicketData = {
-    title: "",
-    description: "",
-    priority: "1",
-    progress: "0",
-    status: "not started",
-    category: "Hardware problem",
-  };
-
-  if(EDITMODE){
-    startingTicketData["title"]=ticket.title;
-    startingTicketData["description"]=ticket.description;
-    startingTicketData["category"]=ticket.category;
-    startingTicketData["priority"]=ticket.priority;
-    startingTicketData["status"]=ticket.status;
-    startingTicketData["progress"]=ticket.progress;
+    title: '',
+    description: '',
+    priority: '1',
+    progress: '0',
+    status: 'not started',
+    project: '',
+    category: category[0].name,
+    ...ticket,
   }
 
-  const [formData, setFormData] = useState(startingTicketData);
+  const [formData, setFormData] = useState(startingTicketData)
 
-  const router = useRouter();
-
-
-//update input state
   const handleChange = (e) => {
-    const { value, name } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-//submit form
+    const { value, name } = e.target
+    setFormData((prevData) => ({ ...prevData, [name]: value }))
+  }
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if(EDITMODE){
-        const res=await fetch(`/api/Tickets/${ticket._id}`,{
-            method:'PUT',
-            body:JSON.stringify({formData}),
-            "content-type":"application/json"
-        });
-        if(!res.ok){
-            throw new Error('Failed to update Ticket');
-    }}
-    else{ const res=await fetch('/api/Tickets',{
-        method:'POST',
-        body:JSON.stringify({formData}),
-        "content-type":"application/json" });
-    if(!res.ok){
-        throw new Error('Failed to create Ticket');
-    }}
-   
-    router.refresh();
-    router.push('/');
-    
-}
+    e.preventDefault()
+    try {
+      if (EDITMODE) {
+        await updateTicket(ticket._id, formData)
+      } else {
+        await createTicket(formData)
+      }
+      onClose()
+    } catch (err) {
+      console.error('Error submitting ticket:', err)
+    }
+  }
+
+  if (error) {
+    return <div className="p-4 text-red-500">Error: {error}</div>
+  }
+  if (loading || loadingProject) {
+    return <div className="p-4">Loading...</div>
+  }
 
   return (
-    <div className="flex justify-center">
-      <form className="flex flex-col gap-3 w-1/2" method="POST" onSubmit={handleSubmit}>
-        <h3>{EDITMODE?"Edit your ticket":"Create your ticket"}</h3>
-        <label>Title</label>
-        <input id="title" name="title" type="text" placeholder="Title" value={formData.title} onChange={handleChange} />
-        <label>Description</label>
-        <textarea id="Description" name="description" type="text" placeholder="Description" value={formData.description} onChange={handleChange} rows="5" />
-        <label>Category</label>
-        <select id="category" name="category" value={formData.category} onChange={handleChange}>
-          <option value="Hardware problem">Hardware problem</option>
-          <option value="Software problem">Software problem</option>
-          <option value="Project">Project</option>
-        </select>
-        <label>Priority</label>
-        <div>
+    <div className="p-6">
+      <h3 className="text-xl font-bold mb-4">
+        {EDITMODE ? 'Edit Ticket' : 'Create New Ticket'}
+      </h3>
+      <form
+        className="flex flex-col gap-4"
+        method="POST"
+        onSubmit={handleSubmit}
+      >
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium">Title</label>
           <input
-            id="priority-1"
-            name="priority"
-            type="radio"
+            id="title"
+            name="title"
+            type="text"
+            placeholder="Title"
+            value={formData.title}
             onChange={handleChange}
-            value={1}
-            checked={formData.priority == 1}
+            className="border rounded-md p-2"
+            required
           />
-          <label>1</label>
-          <input
-            id="priority-2"
-            name="priority"
-            type="radio"
-            onChange={handleChange}
-            value={2}
-            checked={formData.priority == 2}
-          />
-          <label>2</label>
-          <input
-            id="priority-3"
-            name="priority"
-            type="radio"
-            onChange={handleChange}
-            value={3}
-            checked={formData.priority == 3}
-          />
-          <label>3</label>
-          <input
-            id="priority-4"
-            name="priority"
-            type="radio"
-            onChange={handleChange}
-            value={4}
-            checked={formData.priority == 4}
-          />
-          <label>4</label>
-          <input
-            id="priority-5"
-            name="priority"
-            type="radio"
-            onChange={handleChange}
-            value={5}
-            checked={formData.priority == 5}
-          />
-          <label>5</label>
         </div>
-        <label>Progress</label>
-        <input type="range" id="progress" name="progress" min="0" max="100" value={formData.progress} onChange={handleChange} />
-        <label>Status</label>
-        <select id="status" name="status" value={formData.status} onChange={handleChange}>
-          <option value="not started">Not started</option>
-          <option value="in progress">In progress</option>
-          <option value="completed">Completed</option>
-        </select>
-        <input  className="btn" type="submit" value={EDITMODE?"Update ticket":"Create ticket"}/>
+
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Description"
+            value={formData.description}
+            onChange={handleChange}
+            rows="4"
+            className="border rounded-md p-2"
+            required
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium">Category</label>
+          <select
+            id="category"
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            className="border rounded-md p-2"
+          >
+            {category.map((cat) => (
+              <option value={cat.name} key={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium">Project</label>
+          <select
+            id="project"
+            name="project"
+            value={formData.category}
+            onChange={handleChange}
+            className="border rounded-md p-2"
+          >
+            {projects.map((project) => (
+              <option value={project._id} key={project._id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium">Priority</label>
+          <div className="flex gap-4">
+            {[1, 2, 3, 4, 5].map((num) => (
+              <div key={num} className="flex items-center gap-1">
+                <input
+                  id={`priority-${num}`}
+                  name="priority"
+                  type="radio"
+                  value={num}
+                  checked={Number(formData.priority) === num}
+                  onChange={handleChange}
+                />
+                <label htmlFor={`priority-${num}`}>{num}</label>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium">Progress</label>
+          <input
+            type="range"
+            id="progress"
+            name="progress"
+            min="0"
+            max="100"
+            value={formData.progress}
+            onChange={handleChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium">Status</label>
+          <select
+            id="status"
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            className="border rounded-md p-2"
+          >
+            <option value="not started">Not Started</option>
+            <option value="in progress">In Progress</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+
+        <div className="flex justify-end gap-3 mt-4">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 border rounded-md hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-blue-300"
+          >
+            {loading
+              ? 'Saving...'
+              : EDITMODE
+              ? 'Update Ticket'
+              : 'Create Ticket'}
+          </button>
+        </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default TicketForm;
+export default TicketForm
