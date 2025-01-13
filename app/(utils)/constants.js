@@ -23,8 +23,8 @@ const category = [
 ]
 
 const navlinks = [
-  { id: 1, name: 'Dashboard', url: '/', icon: 'DashboardIcon' },
-  { id: 3, name: 'Ticket', url: '/ticket', icon: 'TaskIcon' },
+  { id: 1, name: 'Dashboard', url: '/dashboard', icon: 'DashboardIcon' },
+  { id: 3, name: 'Tickets', url: '/tickets', icon: 'TaskIcon' },
   { id: 2, name: 'Projects', url: '/project', icon: 'ProjectIcon' },
   { id: 4, name: 'Users', url: '/users', icon: 'UserIcon' },
 ]

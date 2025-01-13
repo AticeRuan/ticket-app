@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useTicketContext } from '../(context)/TicketContext'
 import { useProjectContext } from '../(context)/ProjectContext'
 import { category } from '../(utils)/constants'
+import { useRouter } from 'next/navigation'
 
 const TicketForm = ({ ticket = {}, onClose }) => {
   const { loading, error, createTicket, updateTicket } = useTicketContext()
+  const router = useRouter()
   const { projects, loading: loadingProject } = useProjectContext()
 
   const EDITMODE = ticket?._id && ticket._id !== 'new'
@@ -34,6 +36,7 @@ const TicketForm = ({ ticket = {}, onClose }) => {
         await updateTicket(ticket._id, formData)
       } else {
         await createTicket(formData)
+        router.push('/tickets')
       }
       onClose()
     } catch (err) {

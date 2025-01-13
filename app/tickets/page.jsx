@@ -26,11 +26,6 @@ const TicketPage = () => {
     setIsModalOpen(true)
   }
 
-  const handleCreateTicket = () => {
-    setSelectedTicket(null)
-    setIsModalOpen(true)
-  }
-
   const handleCloseModal = () => {
     setIsModalOpen(false)
     setSelectedTicket(null)
@@ -38,16 +33,6 @@ const TicketPage = () => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Tickets</h1>
-        <button
-          onClick={handleCreateTicket}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-        >
-          Create Ticket
-        </button>
-      </div>
-
       {uniqueCategories.map((uniqueCategory, categoryIndex) => (
         <div key={categoryIndex} className="mb-4">
           <h2 className="text-xl font-semibold mb-2">{uniqueCategory}</h2>
