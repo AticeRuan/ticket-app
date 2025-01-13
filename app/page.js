@@ -57,9 +57,9 @@ export default function LandingPage() {
       </Modal>
       {/* Header Section */}
       <header className="w-full p-6 flex justify-between items-center bg-chill-black text-white">
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           {' '}
-          <span className="w-10 h-10"> {icons.LogoIcon()} </span>{' '}
+          <span className="w-8 h-8 mt-1"> {icons.LogoIcon()} </span>{' '}
           <h1 className="text-3xl font-bold">Ticket Axis </h1>
         </div>
 
