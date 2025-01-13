@@ -92,7 +92,7 @@ export default function LandingPage() {
 
         <button
           className="px-8 py-4 bg-chill-orange text-white rounded-md hover:bg-orange-600 transition"
-          onClick={handleLoginModal}
+          onClick={handleSignupModal}
         >
           Get Started
         </button>

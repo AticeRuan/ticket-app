@@ -26,9 +26,9 @@ export default function RootLayout({ children }) {
       <body className={`text-black ${lexend.className} `}>
         <Providers>
           <AuthGuard>
-            <div className="flex  h-screen max-h-screen w-screen relative">
+            <div className="flex  min-h-screen sm:min-h-max max-h-screen w-screen relative">
               <Nav />
-              <div className="flex-grow flex flex-col overflow-y-auto bg-chill-light-orange  ">
+              <div className="flex-grow flex flex-col overflow-y-auto bg-chill-light-orange h-full">
                 <CustomHearder text="Ticket App" name="John Doe" />
                 {children}
               </div>
