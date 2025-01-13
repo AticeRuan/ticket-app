@@ -4,10 +4,11 @@ const CreateButton = ({
   text = 'Create new task',
   onClick,
   collapse = false,
+  className,
 }) => {
   return (
     <button
-      className={`transition-all duration-300 ${
+      className={`${className} transition-all duration-300 ${
         collapse
           ? 'rounded-full bg-chill-orange w-[48px] h-[48px] flex items-center justify-center'
           : `bg-white flex items-center justify-center gap-[10px] rounded-[24px] shrink-0 w-[184px] h-[48px] `

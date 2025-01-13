@@ -36,6 +36,9 @@ export default function LandingPage() {
   const handleFormTypeChange = (type) => {
     setIsLoginOrSignup(type)
   }
+
+  const date = new Date()
+  const year = date.getFullYear()
   return (
     <main className="flex flex-col items-center justify-between min-h-screen bg-gradient-radial from-chill-light-orange to-white text-black">
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
@@ -85,36 +88,39 @@ export default function LandingPage() {
 
       {/* Features Section */}
       <section className="grid md:grid-cols-3 gap-8 p-12">
-        <div className="flex flex-col items-center text-center">
+        <div className="flex flex-col items-center text-center hover:scale-110 transition duration-700 group">
           <Image
-            src="/icons/easy-to-use.svg"
+            src="/assets/otter_easy.png"
             alt="Easy to use"
-            width={64}
-            height={64}
+            width={500}
+            height={500}
+            className="p-8 group-hover:animate-pulse"
           />
           <h3 className="text-xl font-semibold mt-4">Easy to Use</h3>
           <p className="text-gray-600 mt-2">
             Intuitive and user-friendly interface for everyone.
           </p>
         </div>
-        <div className="flex flex-col items-center text-center">
+        <div className="flex flex-col items-center text-center  hover:scale-110 transition duration-700 group">
           <Image
-            src="/icons/track-progress.svg"
+            src="/assets/otter_time.png"
             alt="Track Progress"
-            width={64}
-            height={64}
+            width={500}
+            height={500}
+            className="p-8 group-hover:animate-pulse"
           />
           <h3 className="text-xl font-semibold mt-4">Track Progress</h3>
           <p className="text-gray-600 mt-2">
             Keep tabs on tasks with real-time updates.
           </p>
         </div>
-        <div className="flex flex-col items-center text-center">
+        <div className="flex flex-col items-center text-center hover:scale-110 transition duration-700 group">
           <Image
-            src="/icons/collaborate.svg"
+            src="/assets/otter_colab.png"
             alt="Collaborate"
-            width={64}
-            height={64}
+            width={500}
+            height={500}
+            className="p-8 group-hover:animate-pulse"
           />
           <h3 className="text-xl font-semibold mt-4">Collaborate</h3>
           <p className="text-gray-600 mt-2">
@@ -125,7 +131,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="w-full p-6 bg-chill-black text-white flex justify-between">
-        <p>&copy; 2025 Chill Otters. All rights reserved.</p>
+        <p>&copy; {year} Chill Otters. All rights reserved.</p>
         <nav className="flex gap-4">
           <Link href="/" className="hover:text-chill-orange">
             About

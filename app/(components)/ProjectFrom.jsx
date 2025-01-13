@@ -42,7 +42,10 @@ const ProjectForm = ({ project = {}, onSubmit, onClose }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 p-4 bg-chill-light-orange/50 rounded-xl"
+    >
       <h2 className="text-xl font-bold mb-4">
         {EDITMODE ? 'Edit Project' : 'Create New Project'}
       </h2>

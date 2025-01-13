@@ -8,6 +8,8 @@ import ShutdownIcon from '../(assets)/icons/ShutdownIcon.jsx'
 import UserIcon from '../(assets)/icons/UserIcon.jsx'
 import BackIcon from '../(assets)/icons/BackIcon.jsx'
 import TaskIcon from '../(assets)/icons/TaskIcon.jsx'
+import RefreshIcon from '../(assets)/icons/RefreshIcon.jsx'
+import LogoIcon from '../(assets)/icons/LogoIcon.jsx'
 const category = [
   { id: 1, name: 'UI/UX' },
   { id: 2, name: 'Bug/Defect' },
@@ -40,6 +42,8 @@ const icons = {
   UserIcon,
   BackIcon,
   TaskIcon,
+  RefreshIcon,
+  LogoIcon,
 }
 
 export { category, icons, navlinks }

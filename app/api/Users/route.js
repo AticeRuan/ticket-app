@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import { verifyJWT } from '../(middlewares)/verifyJWT'
 
 // GET all users
-export async function GET() {
+export async function GET(req) {
   const authResponse = await verifyJWT(req)
   if (authResponse.status === 401) {
     return authResponse
@@ -21,10 +21,8 @@ export async function GET() {
 // CREATE a new user
 export async function POST(req) {
   const signupSecretKey = process.env.SIGNUP_SECRET_KEY
-  const role = 'team member'
   try {
     const body = await req.json()
-
     const { secretKey, ...userData } = body.formData
 
     // Verify secret key
@@ -44,8 +42,11 @@ export async function POST(req) {
       )
     }
 
-    // Create new user
-    const newUser = await User.create(role, ...userData)
+    // Create new user with default role
+    const newUser = await User.create({
+      ...userData,
+      role: 'user', // Set default role
+    })
 
     // Remove password from response
     const userResponse = newUser.toObject()

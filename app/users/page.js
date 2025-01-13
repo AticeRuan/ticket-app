@@ -1,8 +1,8 @@
 import React from 'react'
-import { useUserContext } from '../(context)/UserContext'
 
+import UserManagementPage from '../(components)/UserManagement'
 const UserPage = () => {
-  return <div>users</div>
+  return <UserManagementPage />
 }
 
 export default UserPage

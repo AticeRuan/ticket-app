@@ -7,6 +7,7 @@ import localFont from 'next/font/local'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import CustomHearder from './(components)/CustomHeader'
+import { AuthGuard } from './(auth)/AuthGuard'
 
 config.autoAddCss = false
 
@@ -24,13 +25,15 @@ export default function RootLayout({ children }) {
     <html lang="en" className="">
       <body className={`text-black ${lexend.className} `}>
         <Providers>
-          <div className="flex  h-screen max-h-screen w-screen relative">
-            <Nav />
-            <div className="flex-grow flex flex-col overflow-y-auto bg-chill-light-orange  ">
-              <CustomHearder text="Ticket App" name="John Doe" />
-              {children}
+          <AuthGuard>
+            <div className="flex  h-screen max-h-screen w-screen relative">
+              <Nav />
+              <div className="flex-grow flex flex-col overflow-y-auto bg-chill-light-orange  ">
+                <CustomHearder text="Ticket App" name="John Doe" />
+                {children}
+              </div>
             </div>
-          </div>
+          </AuthGuard>
         </Providers>
       </body>
     </html>

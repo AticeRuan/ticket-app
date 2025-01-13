@@ -1,5 +1,11 @@
 'use client'
-import { createContext, useContext, useReducer, useEffect } from 'react'
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useCallback,
+} from 'react'
 import { fetchWithAuth } from '../(utils)/fetchWithAuth'
 import jwt from 'jsonwebtoken'
 
@@ -67,7 +73,7 @@ export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, initialState)
 
   // Fetch all users
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       dispatch({ type: ACTIONS.SET_LOADING, payload: true })
       const res = await fetchWithAuth('/api/Users')
@@ -83,13 +89,13 @@ export const UserProvider = ({ children }) => {
     } finally {
       dispatch({ type: ACTIONS.SET_LOADING, payload: false })
     }
-  }
+  }, []) // Empty dependency array since it only depends on dispatch which is stable
 
-  // Change user role
-  const changeUserRole = async (userId, role) => {
+  // Memoize other functions similarly...
+  const changeUserRole = useCallback(async (userId, role) => {
     try {
       dispatch({ type: ACTIONS.SET_LOADING, payload: true })
-      const res = await fetch(`/api/Users/${userId}`, {
+      const res = await fetchWithAuth(`/api/Users/${userId}`, {
         method: 'PATCH',
         body: JSON.stringify({ action: 'changeRole', role }),
         headers: {
@@ -101,8 +107,7 @@ export const UserProvider = ({ children }) => {
         throw new Error('Failed to change user role')
       }
 
-      // Fetch updated user data
-      const userRes = await fetch(`/api/Users/${userId}`)
+      const userRes = await fetchWithAuth(`/api/Users/${userId}`)
       const { user } = await userRes.json()
 
       dispatch({ type: ACTIONS.UPDATE_USER, payload: user })
@@ -111,7 +116,7 @@ export const UserProvider = ({ children }) => {
     } finally {
       dispatch({ type: ACTIONS.SET_LOADING, payload: false })
     }
-  }
+  }, [])
 
   // Change password
   const changePassword = async (userId, currentPassword, newPassword) => {
@@ -264,21 +269,26 @@ export const UserProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      try {
-        const decoded = jwt.decode(token)
-        if (decoded) {
-          dispatch({
-            type: ACTIONS.SET_USER,
-            payload: { ...decoded, token },
-          })
+    const initializeAuth = async () => {
+      const token = localStorage.getItem('token')
+      if (token) {
+        try {
+          const decoded = jwt.decode(token)
+          if (decoded) {
+            dispatch({
+              type: ACTIONS.SET_USER,
+              payload: { ...decoded, token },
+            })
+          }
+        } catch (error) {
+          localStorage.removeItem('token')
+          dispatch({ type: ACTIONS.CLEAR_USER })
         }
-      } catch (error) {
-        localStorage.removeItem('token')
-        dispatch({ type: ACTIONS.CLEAR_USER })
       }
+      dispatch({ type: ACTIONS.SET_LOADING, payload: false })
     }
+
+    initializeAuth()
   }, [])
 
   const value = {

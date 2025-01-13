@@ -7,28 +7,23 @@ import { usePathname } from 'next/navigation'
 import CreateButton from './common/CreateButton'
 import TicketForm from './TicketForm'
 import Modal from './common/Modal'
-import { useRouter } from 'next/navigation'
-
+import { isValidPath } from '../(utils)/isValidPath '
 const Nav = () => {
-  const { logout } = useUserContext()
   const [collapsed, setCollapsed] = useState(false)
   const pathname = usePathname()
 
   const validPaths = navlinks.map((link) => link.url)
-  const showNav = validPaths.includes(pathname)
+
+  const showNav = isValidPath(pathname, validPaths)
+
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const router = useRouter()
+
   const handleCreateTicket = () => {
     setIsModalOpen(true)
   }
 
   const handleCloseModal = () => {
     setIsModalOpen(false)
-  }
-
-  const handleLogout = () => {
-    logout()
-    router.push('/')
   }
 
   if (!showNav) {
@@ -46,6 +41,15 @@ const Nav = () => {
           collapsed ? 'px-[30px]' : 'px-[46px]'
         } pt-[140px] bg-chill-black  flex-col gap-[100px] relative items-center transition-all duration-300`}
       >
+        <div className="-mt-24 flex gap-4 items-center justify-center -ml-2">
+          <span className="w-10 h-10"> {icons.LogoIcon()} </span>
+
+          {!collapsed && (
+            <h1 className="text-xl whitespace-nowrap font-bold text-chill-white">
+              Ticket Axis{' '}
+            </h1>
+          )}
+        </div>
         <CreateButton
           collapse={collapsed}
           text="Create new ticket"
@@ -78,14 +82,12 @@ const Nav = () => {
             {icons.BackIcon({ color: 'black' })}
           </span>
         </button>
-        <button
-          className={`w-[48px] h-[48px] flex items-center justify-center rounded-full bg-chill-orange mt-[50px] hover:opacity-75 active:scale-75 absolute bottom-[50px]`}
-          onClick={handleLogout}
-        >
-          <span className="w-[34px] h-[34px] rounded-full p-[5px] ">
-            {icons.ShutdownIcon({ color: 'white' })}
-          </span>
-        </button>
+        <img
+          src="/assets/chill_otters.png"
+          className={`absolute bottom-[20px]  ${
+            collapsed ? 'px-20' : 'px-20'
+          } transition-all duration-[2s] hue-rotate-90  hover:scale-125 hover:opacity-80 opacity-20 hover:bottom-[50px] `}
+        ></img>
       </nav>
     </>
   )

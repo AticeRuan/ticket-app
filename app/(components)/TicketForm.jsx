@@ -52,7 +52,7 @@ const TicketForm = ({ ticket = {}, onClose }) => {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-chill-light-orange/50 rounded-xl">
       <h3 className="text-xl font-bold mb-4">
         {EDITMODE ? 'Edit Ticket' : 'Create New Ticket'}
       </h3>

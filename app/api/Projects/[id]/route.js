@@ -1,8 +1,8 @@
 // app/api/Projects/[id]/route.js
-import Project from '@/app/(models)/project'
+import Project from '../../../(models)/project'
 import { NextResponse } from 'next/server'
 import { verifyJWT } from '../../(middlewares)/verifyJWT'
-
+import mongoose from 'mongoose'
 // GET a single project with its tickets
 export async function GET(req, { params }) {
   const authResponse = await verifyJWT(req)

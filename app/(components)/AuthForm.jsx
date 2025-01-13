@@ -82,7 +82,7 @@ export const LoginForm = ({ onFormTypeChange }) => {
 }
 
 export const SignupForm = ({ onFormTypeChange }) => {
-  const { signup, loading, error } = useUserContext()
+  const { signup, loading, error, login } = useUserContext()
   const router = useRouter()
   const [formData, setFormData] = useState({
     name: '',
@@ -103,7 +103,10 @@ export const SignupForm = ({ onFormTypeChange }) => {
     e.preventDefault()
     const success = await signup(formData, secretKey)
     if (success) {
-      router.push('/login')
+      await login(formData.email, formData.password)
+      if (success) {
+        router.push('/')
+      }
     }
   }
   const handleFormTypeChange = () => {

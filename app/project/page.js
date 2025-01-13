@@ -1,14 +1,17 @@
 'use client'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useProjectContext } from '../(context)/ProjectContext'
 import Modal from '../(components)/common/Modal'
 import ProjectForm from '../(components)/ProjectFrom'
+import CreateButton from '../(components)/common/CreateButton'
+import { useRouter } from 'next/navigation'
+import Card from '../(components)/common/Card'
 
 const ProjectPage = () => {
   const { projects, loading, error, fetchProjects, createProject } =
     useProjectContext()
-
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     fetchProjects()
@@ -20,35 +23,146 @@ const ProjectPage = () => {
     setIsModalOpen(false)
   }
 
-  if (loading) return <div>Loading...</div>
-  if (error) return <div>Error: {error.message}</div>
-  if (!projects) return <div>No projects found</div>
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Not set'
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  }
+
+  const getStatusColor = (status) => {
+    const colors = {
+      'Not Started': 'bg-red-100 text-red-800',
+      'In Progress': 'bg-blue-100 text-blue-800',
+      'On Hold': 'bg-yellow-100 text-yellow-800',
+      Completed: 'bg-green-100 text-green-800',
+      Cancelled: 'bg-gray-100 text-gray-800',
+    }
+    return colors[status] || 'bg-gray-100 text-gray-800'
+  }
+
+  const getPriorityLabel = (priority) => {
+    const labels = {
+      1: 'Low',
+      2: 'Medium-Low',
+      3: 'Medium',
+      4: 'Medium-High',
+      5: 'High',
+    }
+    return labels[priority] || priority
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-chill-orange"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <Card className="w-full p-4">
+        <div className="text-red-500">Error loading projects: {error}</div>
+      </Card>
+    )
+  }
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Projects</h1>
-        <button
+    <div className="p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl text-gray-800">Projects Overview</h1>
+        <CreateButton
           onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-        >
-          Create Project
-        </button>
+          text="New Project"
+          className="bg-chill-orange text-white"
+          collapse={true}
+        />
       </div>
 
-      {/* Project list rendering would go here */}
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project) => (
-          <div
-            key={project._id}
-            className="p-4 border rounded-lg shadow hover:shadow-md"
-          >
-            <h3 className="text-lg font-semibold">{project.name}</h3>
-            <p className="text-gray-600">{project.description}</p>
-            {/* Add more project details as needed */}
+      <Card className="w-full overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-chill-light-orange">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
+                  Project Name
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
+                  Start Date
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
+                  Due Date
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
+                  Priority
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
+                  Budget
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {projects.map((project) => (
+                <tr
+                  key={project._id}
+                  className="hover:bg-gray-50 cursor-pointer"
+                  onClick={() => router.push(`/project/${project._id}`)}
+                >
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {project.name}
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
+                        project.status,
+                      )}`}
+                    >
+                      {project.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600">
+                    {formatDate(project.startDate)}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600">
+                    {formatDate(project.dueDate)}
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                      ${
+                        project.priority >= 4
+                          ? 'bg-red-100 text-red-800'
+                          : project.priority === 3
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-green-100 text-green-800'
+                      }`}
+                    >
+                      {getPriorityLabel(project.priority)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600">
+                    ${project.budget?.toLocaleString() || '0'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+
+      {projects.length === 0 && !loading && (
+        <Card className="w-full p-8">
+          <div className="text-center text-gray-600">
+            No projects found. Create a new project to get started.
           </div>
-        ))}
-      </div>
+        </Card>
+      )}
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ProjectForm
