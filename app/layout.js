@@ -17,7 +17,7 @@ const lexend = Lexend({ subsets: ['latin'] })
 export const metadata = {
   title: 'Ticket Axis ',
   description:
-    'Ticket Axis  is a ticket management app developed by Chill Otters',
+    'Ticket Axis empowers teams to seamlessly track, manage, and prioritize tasks and tickets in a collaborative workspace. Start improving your workflow today.',
 }
 
 export default function RootLayout({ children }) {

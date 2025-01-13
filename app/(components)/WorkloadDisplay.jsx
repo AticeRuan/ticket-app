@@ -8,7 +8,7 @@ const WorkloadDisplay = ({ data }) => {
   return (
     <Card className="p-6  shadow-md">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg  mb-4">Projects Workload</h3>
+        <h3 className="text-lg  mb-4">Tickets Workload</h3>
         <select className="border rounded-md p-1 text-sm">
           <option>Last 3 months</option>
           <option>Last 6 months</option>

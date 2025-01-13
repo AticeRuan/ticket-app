@@ -85,7 +85,7 @@ export default function LandingPage() {
           Simplify Your Ticket Management
         </h2>
         <p className="text-lg max-w-3xl text-gray-700 mb-10">
-          Ticket Hub empowers teams to seamlessly track, manage, and prioritize
+          Ticket Axis empowers teams to seamlessly track, manage, and prioritize
           tasks and tickets in a collaborative workspace. Start improving your
           workflow today.
         </p>
