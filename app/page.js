@@ -7,6 +7,7 @@ import { useUserContext } from './(context)/UserContext'
 import { useEffect, useState } from 'react'
 import Modal from './(components)/common/Modal'
 import { LoginForm, SignupForm } from './(components)/AuthForm'
+import { icons } from './(utils)/constants'
 
 export default function LandingPage() {
   const { isAuthenticated } = useUserContext()
@@ -30,7 +31,7 @@ export default function LandingPage() {
     setOpenModal(true)
   }
   const handleCloseModal = () => {
-    setIsModalOpen(false)
+    setOpenModal(false)
   }
 
   const handleFormTypeChange = (type) => {
@@ -43,14 +44,25 @@ export default function LandingPage() {
     <main className="flex flex-col items-center justify-between min-h-screen bg-gradient-radial from-chill-light-orange to-white text-black">
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
         {isLogin ? (
-          <LoginForm onFormTypeChange={handleFormTypeChange} />
+          <LoginForm
+            onFormTypeChange={handleFormTypeChange}
+            onClose={handleCloseModal}
+          />
         ) : (
-          <SignupForm onFormTypeChange={handleFormTypeChange} />
+          <SignupForm
+            onFormTypeChange={handleFormTypeChange}
+            onClose={handleCloseModal}
+          />
         )}
       </Modal>
       {/* Header Section */}
       <header className="w-full p-6 flex justify-between items-center bg-chill-black text-white">
-        <h1 className="text-3xl font-bold">Ticket Axis </h1>
+        <div className="flex gap-2">
+          {' '}
+          <span className="w-10 h-10"> {icons.LogoIcon()} </span>{' '}
+          <h1 className="text-3xl font-bold">Ticket Axis </h1>
+        </div>
+
         <nav className="flex gap-6">
           <button
             onClick={handleLoginModal}

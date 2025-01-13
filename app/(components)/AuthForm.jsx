@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation'
 import { useUserContext } from '../(context)/UserContext'
 import CustomInput from './common/CustomInput'
 import Link from 'next/link'
+import { icons } from '../(utils)/constants'
 
-export const LoginForm = ({ onFormTypeChange }) => {
+export const LoginForm = ({ onFormTypeChange, onClose }) => {
   const { login, loading, error } = useUserContext()
   const router = useRouter()
   const [formData, setFormData] = useState({
@@ -35,7 +36,11 @@ export const LoginForm = ({ onFormTypeChange }) => {
   }
 
   return (
-    <div className="flex justify-center py-32 flex-col items-center bg-chill-light-orange rounded-2xl ">
+    <div className="flex justify-center py-32 flex-col items-center bg-chill-light-orange rounded-2xl relative ">
+      <button className="w-8 h-8 absolute top-10 left-10  " onClick={onClose}>
+        {' '}
+        {icons.BackIcon({ color: '#E65F2B' })}
+      </button>
       <form className="flex flex-col  w-1/2 gap-4" onSubmit={handleSubmit}>
         <h3 className="text-2xl font-bold mb-4">Login</h3>
 
@@ -70,7 +75,7 @@ export const LoginForm = ({ onFormTypeChange }) => {
         <p>
           Don&apos;t have an account?
           <button
-            className="text-blue-500 hover:text-blue-700 ml-1"
+            className="text-chill-orange hover:opacity-70 ml-1"
             onClick={handleFormTypeChange}
           >
             Sign up
@@ -81,7 +86,7 @@ export const LoginForm = ({ onFormTypeChange }) => {
   )
 }
 
-export const SignupForm = ({ onFormTypeChange }) => {
+export const SignupForm = ({ onFormTypeChange, onClose }) => {
   const { signup, loading, error, login } = useUserContext()
   const router = useRouter()
   const [formData, setFormData] = useState({
@@ -113,7 +118,11 @@ export const SignupForm = ({ onFormTypeChange }) => {
     onFormTypeChange('login')
   }
   return (
-    <div className="flex justify-center py-32 flex-col items-center bg-chill-light-orange rounded-2xl ">
+    <div className="flex justify-center py-32 flex-col items-center bg-chill-light-orange rounded-2xl relative">
+      <button className="w-8 h-8 absolute top-10 left-10 " onClick={onClose}>
+        {' '}
+        {icons.BackIcon({ color: '#E65F2B' })}
+      </button>
       <form className="flex flex-col gap-3 w-1/2 " onSubmit={handleSubmit}>
         <h3 className="text-2xl font-bold mb-4">Sign Up</h3>
 
@@ -170,7 +179,7 @@ export const SignupForm = ({ onFormTypeChange }) => {
           Already have an account?
           <button
             onClick={handleFormTypeChange}
-            className="text-blue-500 hover:text-blue-700 ml-1"
+            className="text-chill-orange hover:opacity-70 ml-1"
           >
             Login
           </button>
