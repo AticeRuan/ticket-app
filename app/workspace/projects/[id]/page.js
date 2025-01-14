@@ -11,10 +11,12 @@ import { useRouter } from 'next/navigation'
 import Loading from '../../../(components)/common/Loading'
 
 const SingleProjectPage = ({ params }) => {
-  const { getProjectById, updateProject } = useProjectContext()
+  const { getProjectById, updateProject, deleteProject } = useProjectContext()
   const { tickets } = useTicketContext()
   const [project, setProject] = useState(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const router = useRouter()
@@ -43,6 +45,23 @@ const SingleProjectPage = ({ params }) => {
     } finally {
       setIsEditModalOpen(false)
     }
+  }
+
+  const handleDeleteProject = async () => {
+    if (deleteConfirmText !== project.name) return
+
+    try {
+      await deleteProject(project._id)
+      router.push('/workspace/projects')
+    } catch (err) {
+      console.error('Error deleting project:', err)
+      setError('Failed to delete project')
+    }
+  }
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false)
+    setDeleteConfirmText('')
   }
 
   const formatDate = (dateString) => {
@@ -115,12 +134,20 @@ const SingleProjectPage = ({ params }) => {
             </div>
             <p className="text-gray-600 max-w-3xl">{project.description}</p>
           </div>
-          <button
-            onClick={() => setIsEditModalOpen(true)}
-            className="px-4 py-2 bg-chill-orange text-white rounded-md hover:bg-opacity-90 transition-colors"
-          >
-            Edit Project
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setIsEditModalOpen(true)}
+              className="px-4 py-2 bg-chill-orange text-white rounded-md hover:bg-opacity-90 transition-colors"
+            >
+              Edit Project
+            </button>
+            <button
+              onClick={() => setIsDeleteModalOpen(true)}
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-opacity-90 transition-colors"
+            >
+              Delete Project
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -170,6 +197,48 @@ const SingleProjectPage = ({ params }) => {
           onClose={() => setIsEditModalOpen(false)}
           onSubmit={handleUpdateProject}
         />
+      </Modal>
+      <Modal isOpen={isDeleteModalOpen} onClose={handleCloseDeleteModal}>
+        <div className="p-6">
+          <h2 className="text-xl font-bold text-red-600 mb-4">
+            Delete Project
+          </h2>
+          <p className="text-gray-600 mb-4">
+            This action cannot be undone. This will permanently delete the
+            project and all associated tickets.
+          </p>
+          <p className="mb-4">
+            Please type <span className="font-semibold">{project.name}</span> to
+            confirm.
+          </p>
+          <input
+            type="text"
+            value={deleteConfirmText}
+            onChange={(e) => setDeleteConfirmText(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="Enter project name"
+          />
+
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={handleCloseDeleteModal}
+              className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleDeleteProject}
+              disabled={deleteConfirmText !== project.name}
+              className={`px-4 py-2 bg-red-600 text-white rounded-md ${
+                deleteConfirmText !== project.name
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'hover:bg-red-700'
+              }`}
+            >
+              Delete Project
+            </button>
+          </div>
+        </div>
       </Modal>
     </div>
   )
