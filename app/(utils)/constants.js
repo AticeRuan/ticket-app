@@ -25,10 +25,15 @@ const category = [
 ]
 
 const navlinks = [
-  { id: 1, name: 'Dashboard', url: '/dashboard', icon: 'DashboardIcon' },
-  { id: 3, name: 'Tickets', url: '/tickets', icon: 'TaskIcon' },
-  { id: 2, name: 'Projects', url: '/project', icon: 'ProjectIcon' },
-  { id: 4, name: 'Users', url: '/users', icon: 'UserIcon' },
+  {
+    id: 1,
+    name: 'Dashboard',
+    url: '/workspace/dashboard',
+    icon: 'DashboardIcon',
+  },
+  { id: 3, name: 'Tickets', url: '/workspace/tickets', icon: 'TaskIcon' },
+  { id: 2, name: 'Projects', url: '/workspace/projects', icon: 'ProjectIcon' },
+  { id: 4, name: 'Team', url: '/workspace/team', icon: 'UserIcon' },
 ]
 
 const icons = {

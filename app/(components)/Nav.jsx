@@ -7,14 +7,10 @@ import { usePathname } from 'next/navigation'
 import CreateButton from './common/CreateButton'
 import TicketForm from './TicketForm'
 import Modal from './common/Modal'
-import { isValidPath } from '../(utils)/isValidPath '
+
 const Nav = () => {
   const [collapsed, setCollapsed] = useState(false)
   const pathname = usePathname()
-
-  const validPaths = navlinks.map((link) => link.url)
-
-  const showNav = isValidPath(pathname, validPaths)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -24,10 +20,6 @@ const Nav = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false)
-  }
-
-  if (!showNav) {
-    return null
   }
 
   return (
@@ -82,12 +74,6 @@ const Nav = () => {
             {icons.BackIcon({ color: 'black' })}
           </span>
         </button>
-        <img
-          src="/assets/chill_otters.png"
-          className={`absolute bottom-[20px]  ${
-            collapsed ? 'px-20' : 'px-20'
-          } transition-all duration-[2s] hue-rotate-90  hover:scale-125 hover:opacity-80 opacity-20 hover:bottom-[50px] `}
-        ></img>
       </nav>
     </>
   )

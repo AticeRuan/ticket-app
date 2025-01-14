@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUserContext } from '../(context)/UserContext'
 import CustomInput from './common/CustomInput'
-import Link from 'next/link'
+
 import { icons } from '../(utils)/constants'
 
 export const LoginForm = ({ onFormTypeChange, onClose }) => {
@@ -31,7 +31,7 @@ export const LoginForm = ({ onFormTypeChange, onClose }) => {
     e.preventDefault()
     const success = await login(formData.email, formData.password)
     if (success) {
-      router.push('/')
+      router.push('/workspace/dashboard')
     }
   }
 
@@ -110,7 +110,7 @@ export const SignupForm = ({ onFormTypeChange, onClose }) => {
     if (success) {
       await login(formData.email, formData.password)
       if (success) {
-        router.push('/')
+        router.push('/workspace/dashboard')
       }
     }
   }

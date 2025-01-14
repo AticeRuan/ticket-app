@@ -1,20 +1,16 @@
 'use client'
-import React, { useEffect } from 'react'
 import Avatar from './common/Avatar'
-import CustomInput from './common/CustomInput'
+
 import { usePathname } from 'next/navigation'
 import { useUserContext } from '../(context)/UserContext'
-import { icons, navlinks } from '../(utils)/constants'
+import { icons } from '../(utils)/constants'
 import { useRouter } from 'next/navigation'
-import { isValidPath } from '../(utils)/isValidPath '
+
 const CustomHeader = () => {
   const pathname = usePathname()
-  const text = pathname === '/' ? 'Dashboard' : pathname.split('/')[1]
+  const text = pathname.split('/')[2]
 
-  const validPaths = navlinks.map((link) => link.url)
-  const showHeader = isValidPath(pathname, validPaths)
-
-  const { user, isAuthenticated, logout } = useUserContext()
+  const { user, logout } = useUserContext()
   const router = useRouter()
   const handleLogout = () => {
     logout()
@@ -22,9 +18,7 @@ const CustomHeader = () => {
   }
 
   const name = user?.name || '?'
-  if (!showHeader) {
-    return null
-  }
+
   return (
     <section className="flex items-center w-full  px-[40px] py-[25px] justify-between">
       <h1 className="text-chill-black text-[40px] tracking-[0.16px] capitalize">

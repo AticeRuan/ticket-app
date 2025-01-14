@@ -1,14 +1,14 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useProjectContext } from '../../(context)/ProjectContext'
-import { useTicketContext } from '../../(context)/TicketContext'
-import Modal from '../../(components)/common/Modal'
-import ProjectForm from '../../(components)/ProjectFrom'
-import TicketCard from '../../(components)/TicketCard'
-import Card from '../../(components)/common/Card'
-import { icons } from '../../(utils)/constants'
+import { useProjectContext } from '../../../(context)/ProjectContext'
+import { useTicketContext } from '../../../(context)/TicketContext'
+import Modal from '../../../(components)/common/Modal'
+import ProjectForm from '../../../(components)/ProjectFrom'
+import TicketCard from '../../../(components)/TicketCard'
+import Card from '../../../(components)/common/Card'
+import { icons } from '../../../(utils)/constants'
 import { useRouter } from 'next/navigation'
-import Loading from '../../(components)/common/Loading'
+import Loading from '../../../(components)/common/Loading'
 
 const SingleProjectPage = ({ params }) => {
   const { getProjectById } = useProjectContext()

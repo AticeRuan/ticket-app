@@ -1,11 +1,11 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useProjectContext } from '../(context)/ProjectContext'
-import Modal from '../(components)/common/Modal'
-import ProjectForm from '../(components)/ProjectFrom'
-import CreateButton from '../(components)/common/CreateButton'
+import { useProjectContext } from '../../(context)/ProjectContext'
+import Modal from '../../(components)/common/Modal'
+import ProjectForm from '../../(components)/ProjectFrom'
+import CreateButton from '../../(components)/common/CreateButton'
 import { useRouter } from 'next/navigation'
-import Card from '../(components)/common/Card'
+import Card from '../../(components)/common/Card'
 
 const ProjectPage = () => {
   const { projects, loading, error, fetchProjects, createProject } =
@@ -112,7 +112,9 @@ const ProjectPage = () => {
                 <tr
                   key={project._id}
                   className="hover:bg-gray-50 cursor-pointer"
-                  onClick={() => router.push(`/project/${project._id}`)}
+                  onClick={() =>
+                    router.push(`/workspace/project/${project._id}`)
+                  }
                 >
                   <td className="px-6 py-4 text-sm text-gray-800">
                     {project.name}

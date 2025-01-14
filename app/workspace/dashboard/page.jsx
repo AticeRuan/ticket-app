@@ -1,10 +1,10 @@
 'use client'
 import React, { useEffect } from 'react'
-import Card from '../(components)/common/Card'
-import { useTicketContext } from '../(context)/TicketContext'
-import { useProjectContext } from '../(context)/ProjectContext'
-import WorkloadDisplay from '../(components)/WorkloadDisplay'
-import TicketSummary from '../(components)/TicketSummary'
+import Card from '../../(components)/common/Card'
+import { useTicketContext } from '../../(context)/TicketContext'
+import { useProjectContext } from '../../(context)/ProjectContext'
+import WorkloadDisplay from '../../(components)/WorkloadDisplay'
+import TicketSummary from '../../(components)/TicketSummary'
 import {
   LineChart,
   Line,

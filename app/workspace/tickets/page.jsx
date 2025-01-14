@@ -1,11 +1,11 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import TicketCard from '../(components)/TicketCard'
-import { useTicketContext } from '../(context)/TicketContext'
-import TicketForm from '../(components)/TicketForm'
-import Modal from '../(components)/common/Modal'
-import CreateButton from '../(components)/common/CreateButton'
-import { icons } from '../(utils)/constants'
+import TicketCard from '../../(components)/TicketCard'
+import { useTicketContext } from '../../(context)/TicketContext'
+import TicketForm from '../../(components)/TicketForm'
+import Modal from '../../(components)/common/Modal'
+import CreateButton from '../../(components)/common/CreateButton'
+import { icons } from '../../(utils)/constants'
 
 const TicketPage = () => {
   const { tickets, loading, error, fetchTickets } = useTicketContext()

@@ -17,7 +17,7 @@ export default function LandingPage() {
   const router = useRouter()
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard')
+      router.push('/workspace/dashboard')
     }
   }, [isAuthenticated, router])
 
