@@ -29,13 +29,8 @@ const workloadData = [
 ]
 
 const Dashboard = () => {
-  const { tickets, fetchTickets } = useTicketContext()
-  const { projects, fetchProjects } = useProjectContext()
-
-  useEffect(() => {
-    fetchTickets()
-    fetchProjects()
-  }, [])
+  const { tickets } = useTicketContext()
+  const { projects } = useProjectContext()
 
   // Calculate metrics
   const totalTickets = tickets?.length || 0
@@ -153,7 +148,7 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Activity */}
-      <TicketSummary tickets={tickets} />
+      <TicketSummary tickets={tickets} projects={projects} />
       <WorkloadDisplay data={workloadData} />
     </div>
   )

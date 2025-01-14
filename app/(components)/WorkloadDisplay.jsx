@@ -20,7 +20,7 @@ const WorkloadDisplay = ({ data }) => {
         {data.map((member) => (
           <div key={member.name} className="flex flex-col items-center gap-2">
             {/* Circles stack */}
-            <div className="flex flex-col-reverse gap-1">
+            <div className="flex flex-col-reverse gap-1 relative">
               {[...Array(MAX_CIRCLES)].map((_, index) => {
                 const isActive = index < member.workload
                 return (
@@ -36,7 +36,7 @@ const WorkloadDisplay = ({ data }) => {
               })}
               {/* Workload number */}
               {member.workload > 0 && (
-                <div className="absolute -mt-6 bg-gray-900 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+                <div className="absolute bottom-0 left-1/2 -translate-x-[50%] bg-gray-900 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
                   {member.workload.toString().padStart(2, '0')}
                 </div>
               )}

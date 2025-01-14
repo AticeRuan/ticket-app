@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useAuthContext } from './(context)/AuthContext'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from './(components)/common/Modal'
 import { LoginForm, SignupForm } from './(components)/AuthForm'
 import { icons } from './(utils)/constants'
@@ -36,9 +36,11 @@ export default function LandingPage() {
   const date = new Date()
   const year = date.getFullYear()
 
-  if (user) {
-    router.push('/workspace/dashboard')
-  }
+  useEffect(() => {
+    if (user) {
+      router.push('/workspace/dashboard')
+    }
+  }, [user, router])
   return (
     <main className="flex flex-col items-center justify-between min-h-screen bg-gradient-radial from-chill-light-orange to-white text-black">
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>

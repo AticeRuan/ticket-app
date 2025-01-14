@@ -3,7 +3,7 @@ import Card from './common/Card'
 import StatusDisplay from './StatusDisplay'
 import PriorityDisplay from './PriorityDisplay'
 
-const TicketSummary = ({ tickets }) => {
+const TicketSummary = ({ tickets, projects }) => {
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -48,7 +48,10 @@ const TicketSummary = ({ tickets }) => {
                 <td className="py-4">{ticket.category}</td>
                 <td className="py-4">
                   <span className="capitalize ">
-                    {ticket.project || 'none'}
+                    {
+                      projects.find((project) => project._id === ticket.project)
+                        ?.name
+                    }
                   </span>
                 </td>
                 <td className="py-4">

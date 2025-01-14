@@ -20,6 +20,7 @@ const TicketForm = ({ ticket = {}, onClose }) => {
     status: 'Open',
     project: null,
     category: category[0].name,
+    owner: null,
     ...ticket,
   }
 
@@ -46,7 +47,6 @@ const TicketForm = ({ ticket = {}, onClose }) => {
         priority: parseInt(formData.priority, 10),
         progress: parseInt(formData.progress, 10),
         project: formData.project || null,
-        active: true,
       }
 
       if (EDITMODE) {
@@ -125,26 +125,28 @@ const TicketForm = ({ ticket = {}, onClose }) => {
             ))}
           </select>
         </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium">Project</label>
-          <select
-            id="project"
-            name="project"
-            value={formData.project || null}
-            onChange={handleChange}
-            className="border rounded-md p-2"
-          >
-            {' '}
-            <option value={null} className="">
-              No Related Project
-            </option>
-            {projects.map((project) => (
-              <option value={project._id} key={project._id}>
-                {project.name}
+        {!EDITMODE && (
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium">Project</label>
+            <select
+              id="project"
+              name="project"
+              value={formData.project || null}
+              onChange={handleChange}
+              className="border rounded-md p-2"
+            >
+              {' '}
+              <option value={null} className="">
+                No Related Project
               </option>
-            ))}
-          </select>
-        </div>
+              {projects.map((project) => (
+                <option value={project._id} key={project._id}>
+                  {project.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="flex flex-col gap-1">
           <label className="text-sm font-medium">Priority</label>

@@ -14,10 +14,6 @@ const ProjectPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const router = useRouter()
 
-  useEffect(() => {
-    fetchProjects()
-  }, [])
-
   const handleCreateProject = async (formData) => {
     await createProject(formData)
     await fetchProjects()
@@ -124,7 +120,7 @@ const ProjectPage = () => {
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
                         project.status,
-                      )}`}
+                      )} whitespace-nowrap`}
                     >
                       {project.status}
                     </span>
@@ -137,7 +133,7 @@ const ProjectPage = () => {
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap
                       ${
                         project.priority >= 4
                           ? 'bg-red-100 text-red-800'

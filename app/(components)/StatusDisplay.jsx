@@ -13,7 +13,7 @@ const StatusDisplay = ({ status }) => {
         color = 'bg-red-200 text-red-700'
         break
       case 'In Progress':
-        color = 'bg-chill-orange/50 text-chill-orange'
+        color = 'bg-yellow-400 text-yellow-900'
         break
       case 'Closed':
         color = 'bg-blue-200 text-blue-700'
@@ -32,7 +32,7 @@ const StatusDisplay = ({ status }) => {
 
   return (
     <span
-      className={`inline-block rounded-full capitalize px-2 py-1 text-xs font-semibold text-gray-700 ${getColor(
+      className={`inline-block rounded-full capitalize px-2 py-1 text-xs font-semibold whitespace-nowrap ${getColor(
         status,
       )}`}
     >

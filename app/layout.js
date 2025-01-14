@@ -13,7 +13,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="">
-      <body className={`text-black ${lexend.className} `}>
+      <body
+        className={`text-black ${lexend.className} `}
+        suppressHydrationWarning={true}
+      >
         <Providers>
           <div className="flex  h-screen w-screen relative">{children}</div>
         </Providers>

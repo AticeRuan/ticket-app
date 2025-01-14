@@ -49,7 +49,9 @@ export const UserProvider = ({ children }) => {
   const fetchUsers = useCallback(async () => {
     try {
       dispatch({ type: ACTIONS.SET_LOADING, payload: true })
-      const res = await fetchWithAuth('/api/Users')
+      const res = await fetchWithAuth(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/Users`,
+      )
 
       if (!res.ok) {
         throw new Error('Failed to fetch users')
@@ -68,13 +70,16 @@ export const UserProvider = ({ children }) => {
   const changeUserRole = useCallback(async (userId, role) => {
     try {
       dispatch({ type: ACTIONS.SET_LOADING, payload: true })
-      const res = await fetchWithAuth(`/api/Users/${userId}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ action: 'changeRole', role }),
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await fetchWithAuth(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/Users/${userId}`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({ action: 'changeRole', role }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
 
       if (!res.ok) {
         throw new Error('Failed to change user role')
@@ -95,17 +100,20 @@ export const UserProvider = ({ children }) => {
   const changePassword = async (userId, currentPassword, newPassword) => {
     try {
       dispatch({ type: ACTIONS.SET_LOADING, payload: true })
-      const res = await fetchWithAuth(`/api/Users/${userId}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          action: 'changePassword',
-          currentPassword,
-          newPassword,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await fetchWithAuth(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/Users/${userId}`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({
+            action: 'changePassword',
+            currentPassword,
+            newPassword,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
 
       if (!res.ok) {
         const data = await res.json()
@@ -125,13 +133,16 @@ export const UserProvider = ({ children }) => {
   const resetPassword = async (userId) => {
     try {
       dispatch({ type: ACTIONS.SET_LOADING, payload: true })
-      const res = await fetchWithAuth(`/api/Users/${userId}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ action: 'resetPassword' }),
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await fetchWithAuth(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/Users/${userId}`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({ action: 'resetPassword' }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
 
       if (!res.ok) {
         throw new Error('Failed to reset password')
@@ -150,9 +161,12 @@ export const UserProvider = ({ children }) => {
   const deleteUser = async (userId) => {
     try {
       dispatch({ type: ACTIONS.SET_LOADING, payload: true })
-      const res = await fetchWithAuth(`/api/Users/${userId}`, {
-        method: 'DELETE',
-      })
+      const res = await fetchWithAuth(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/Users/${userId}`,
+        {
+          method: 'DELETE',
+        },
+      )
 
       if (!res.ok) {
         throw new Error('Failed to delete user')

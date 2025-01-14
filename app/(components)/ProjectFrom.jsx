@@ -176,7 +176,7 @@ const ProjectForm = ({ project = {}, onSubmit, onClose }) => {
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          className="px-4 py-2 bg-chill-orange/90 text-white rounded-md hover:bg-chill-orange"
         >
           {EDITMODE ? 'Update Project' : 'Create Project'}
         </button>

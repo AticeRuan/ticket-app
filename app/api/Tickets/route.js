@@ -39,7 +39,6 @@ export async function POST(request) {
       category: ticketData.category,
       priority: ticketData.priority,
       status: ticketData.status || 'Open',
-      active: true,
       project:
         ticketData.project && ticketData.project !== ''
           ? ticketData.project

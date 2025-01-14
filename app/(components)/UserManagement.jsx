@@ -1,22 +1,26 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { useUserContext } from '../(context)/UserContext'
-
+import { useAuthContext } from '../(context)/AuthContext'
 import Card from '../(components)/common/Card'
 import { icons } from '../(utils)/constants'
 
 const UserManagementPage = () => {
-  const { users, fetchUsers, resetPassword, changeUserRole, loading, error } =
+  const { users, resetPassword, changeUserRole, loading, error, deleteUser } =
     useUserContext()
+  const { user } = useAuthContext()
   const [alert, setAlert] = useState({
     show: false,
     message: '',
     isError: false,
   })
+  const [isAdmin, setIsAdmin] = useState(false)
 
-  //   useEffect(() => {
-  //     fetchUsers()
-  //   }, [fetchUsers]) //
+  useEffect(() => {
+    if (user && user.role === 'admin') {
+      setIsAdmin(true)
+    }
+  }, [user])
 
   const handleResetPassword = async (userId) => {
     try {
@@ -60,6 +64,22 @@ const UserManagementPage = () => {
       () => setAlert({ show: false, message: '', isError: false }),
       3000,
     )
+  }
+  const handleDelteUser = async (userId) => {
+    try {
+      await deleteUser(userId)
+      setAlert({
+        show: true,
+        message: 'User has been deleted successfully',
+        isError: false,
+      })
+    } catch (err) {
+      setAlert({
+        show: true,
+        message: 'Failed to delete user',
+        isError: true,
+      })
+    }
   }
 
   if (loading) {
@@ -120,14 +140,16 @@ const UserManagementPage = () => {
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
                   Role
                 </th>
-                <th className="px-6 py-3 text-right text-sm font-semibold text-gray-600">
-                  Actions
-                </th>
+                {isAdmin && (
+                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-600">
+                    Actions
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {users?.map((user) => (
-                <tr key={user._id} className="hover:bg-gray-50">
+                <tr key={user._id} className="">
                   <td className="px-6 py-4 text-sm text-gray-800">
                     {user.name}
                   </td>
@@ -145,22 +167,30 @@ const UserManagementPage = () => {
                       {user.role}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex justify-end gap-3">
-                      <button
-                        onClick={() => handleResetPassword(user._id)}
-                        className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
-                      >
-                        Reset Password
-                      </button>
-                      <button
-                        onClick={() => handleRoleChange(user._id, user.role)}
-                        className="flex items-center gap-1 text-chill-orange hover:text-orange-700 text-sm font-medium transition-colors"
-                      >
-                        Change Role
-                      </button>
-                    </div>
-                  </td>
+                  {isAdmin && (
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex justify-end gap-3">
+                        <button
+                          onClick={() => handleResetPassword(user._id)}
+                          className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
+                        >
+                          Reset Password
+                        </button>
+                        <button
+                          onClick={() => handleRoleChange(user._id, user.role)}
+                          className="flex items-center gap-1 text-chill-orange hover:text-orange-700 text-sm font-medium transition-colors"
+                        >
+                          Change Role
+                        </button>
+                        <button
+                          onClick={() => handleDelteUser(user._id)}
+                          className="flex items-center gap-1 text-red-800 hover:text-red-400 text-sm font-medium transition-colors"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
