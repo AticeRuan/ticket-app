@@ -2,13 +2,13 @@
 'use client'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUserContext } from '../(context)/UserContext'
+import { useAuthContext } from '../(context)/AuthContext'
 import CustomInput from './common/CustomInput'
 
 import { icons } from '../(utils)/constants'
 
 export const LoginForm = ({ onFormTypeChange, onClose }) => {
-  const { login, loading, error } = useUserContext()
+  const { login, loading, error } = useAuthContext()
   const router = useRouter()
   const [formData, setFormData] = useState({
     email: '',
@@ -87,7 +87,7 @@ export const LoginForm = ({ onFormTypeChange, onClose }) => {
 }
 
 export const SignupForm = ({ onFormTypeChange, onClose }) => {
-  const { signup, loading, error, login } = useUserContext()
+  const { signup, loading, error } = useAuthContext()
   const router = useRouter()
   const [formData, setFormData] = useState({
     name: '',
@@ -108,10 +108,7 @@ export const SignupForm = ({ onFormTypeChange, onClose }) => {
     e.preventDefault()
     const success = await signup(formData, secretKey)
     if (success) {
-      await login(formData.email, formData.password)
-      if (success) {
-        router.push('/workspace/dashboard')
-      }
+      router.push('/workspace/dashboard')
     }
   }
   const handleFormTypeChange = () => {

@@ -113,7 +113,7 @@ const ProjectPage = () => {
                   key={project._id}
                   className="hover:bg-gray-50 cursor-pointer"
                   onClick={() =>
-                    router.push(`/workspace/project/${project._id}`)
+                    router.push(`/workspace/projects/${project._id}`)
                   }
                 >
                   <td className="px-6 py-4 text-sm text-gray-800">

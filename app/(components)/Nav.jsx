@@ -1,6 +1,5 @@
 'use client'
 import React, { useState } from 'react'
-import { useUserContext } from '../(context)/UserContext'
 import { navlinks, icons } from '../(utils)/constants'
 import NavButton from './common/NavButton'
 import { usePathname } from 'next/navigation'

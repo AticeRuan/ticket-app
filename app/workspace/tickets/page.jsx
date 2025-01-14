@@ -4,8 +4,8 @@ import TicketCard from '../../(components)/TicketCard'
 import { useTicketContext } from '../../(context)/TicketContext'
 import TicketForm from '../../(components)/TicketForm'
 import Modal from '../../(components)/common/Modal'
-import CreateButton from '../../(components)/common/CreateButton'
 import { icons } from '../../(utils)/constants'
+import Loading from '../../(components)/common/Loading'
 
 const TicketPage = () => {
   const { tickets, loading, error, fetchTickets } = useTicketContext()
@@ -35,11 +35,7 @@ const TicketPage = () => {
   }
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <div className="text-lg text-gray-600">Loading tickets...</div>
-      </div>
-    )
+    return <Loading />
   }
 
   if (error) {

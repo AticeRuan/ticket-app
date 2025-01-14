@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
+import { type } from 'os'
 
 mongoose.connect(process.env.NEXT_PUBLIC_MONGODB_URI)
 mongoose.Promise = global.Promise
@@ -34,20 +35,10 @@ const projectSchema = new Schema(
       default: 3,
     },
     owner: {
-      type: String, // Could be changed to ObjectId if you implement user authentication
-      required: true,
+      type: Schema.Types.ObjectId,
+      ref: 'User',
     },
-    team: [
-      {
-        type: String, // Could be changed to ObjectId if you implement user authentication
-      },
-    ],
-    tags: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
+
     budget: {
       type: Number,
       min: 0,
@@ -56,6 +47,12 @@ const projectSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    tickets: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Ticket',
+      },
+    ],
   },
   {
     timestamps: true,

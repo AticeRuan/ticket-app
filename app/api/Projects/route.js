@@ -20,13 +20,20 @@ export async function GET(req) {
 
 // CREATE a new project
 export async function POST(req) {
-  const authResponse = await verifyJWT(req)
-  if (authResponse.status === 401) {
-    return authResponse
-  }
   try {
+    const authResponse = await verifyJWT(req)
+    if (authResponse.status === 401) {
+      return authResponse
+    }
+
+    // Get user ID from JWT token
+    const userId = req.user.userId // JWT verification adds user to request
+
     const body = await req.json()
     const projectData = body.formData
+
+    // Add owner from JWT token
+    projectData.owner = userId
 
     // Convert string dates to Date objects
     if (projectData.startDate) {
@@ -36,13 +43,27 @@ export async function POST(req) {
       projectData.dueDate = new Date(projectData.dueDate)
     }
 
+    // Remove any undefined or empty fields
+    Object.keys(projectData).forEach((key) => {
+      if (projectData[key] === undefined || projectData[key] === '') {
+        delete projectData[key]
+      }
+    })
+
     const newProject = await Project.create(projectData)
+
     return NextResponse.json(
       { message: 'Project created', project: newProject },
       { status: 201 },
     )
   } catch (error) {
-    console.log(error)
-    return NextResponse.json({ message: 'Error', error }, { status: 500 })
+    console.error('Project creation error:', error) // Better error logging
+    return NextResponse.json(
+      {
+        message: 'Error creating project',
+        error: error.message,
+      },
+      { status: 500 },
+    )
   }
 }

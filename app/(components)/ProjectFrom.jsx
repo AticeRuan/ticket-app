@@ -2,7 +2,11 @@ import React, { useState } from 'react'
 
 const ProjectForm = ({ project = {}, onSubmit, onClose }) => {
   const EDITMODE = project?._id !== undefined
-
+  const formatDateForInput = (dateString) => {
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    return date.toISOString().split('T')[0]
+  }
   const startingProjectData = {
     name: '',
     description: '',
@@ -10,15 +14,16 @@ const ProjectForm = ({ project = {}, onSubmit, onClose }) => {
     dueDate: '',
     status: 'Not Started',
     priority: 3,
-    owner: 'user@example.com',
-    team: [],
-    tags: [],
     budget: 0,
   }
 
   const [formData, setFormData] = useState({
     ...startingProjectData,
     ...project,
+    startDate: project.startDate
+      ? formatDateForInput(project.startDate)
+      : startingProjectData.startDate,
+    dueDate: project.dueDate ? formatDateForInput(project.dueDate) : '',
   })
 
   const [error, setError] = useState('')

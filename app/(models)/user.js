@@ -30,7 +30,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ['user', 'admin', 'manager'],
+      enum: ['team member', 'admin', 'manager'],
       default: 'user',
     },
     active: {
@@ -40,13 +40,13 @@ const userSchema = new Schema(
     lastLogin: {
       type: Date,
     },
+    tickets: [{ type: Schema.Types.ObjectId, ref: 'Ticket' }],
   },
   {
     timestamps: true,
   },
 )
 
-// Add indexes for frequently queried fields
 userSchema.index({ email: 1 })
 userSchema.index({ role: 1 })
 

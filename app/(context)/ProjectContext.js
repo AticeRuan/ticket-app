@@ -82,13 +82,16 @@ export const ProjectProvider = ({ children }) => {
   const createProject = async (formData) => {
     try {
       dispatch({ type: ACTIONS.SET_LOADING, payload: true })
-      const res = await fetchWithAuth('/api/Projects', {
-        method: 'POST',
-        body: JSON.stringify({ formData }),
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await fetchWithAuth(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/Projects`,
+        {
+          method: 'POST',
+          body: JSON.stringify({ formData }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
 
       if (!res.ok) {
         throw new Error('Failed to create project')
@@ -108,13 +111,16 @@ export const ProjectProvider = ({ children }) => {
   const updateProject = async (id, formData) => {
     try {
       dispatch({ type: ACTIONS.SET_LOADING, payload: true })
-      const res = await fetchWithAuth(`/api/Projects/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify({ formData }),
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await fetchWithAuth(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/Projects/${id}`,
+        {
+          method: 'PUT',
+          body: JSON.stringify({ formData }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
 
       if (!res.ok) {
         throw new Error('Failed to update project')

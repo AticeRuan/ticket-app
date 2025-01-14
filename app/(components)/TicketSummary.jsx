@@ -21,7 +21,7 @@ const TicketSummary = ({ tickets }) => {
             <option>Project</option>
           </select>
           <select className="border rounded px-3 py-1 text-sm">
-            <option>Project manager</option>
+            <option>Ticket Owner</option>
           </select>
           <select className="border rounded px-3 py-1 text-sm">
             <option>Status</option>

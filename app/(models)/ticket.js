@@ -9,7 +9,11 @@ const ticketSchema = new Schema(
     description: String,
     category: String,
     priority: Number,
-    status: String,
+    status: {
+      type: String,
+      enum: ['Open', 'In Progress', 'Resolved', 'Closed'],
+      default: 'Open',
+    },
     active: Boolean,
     project: {
       type: Schema.Types.ObjectId,

@@ -3,23 +3,18 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useUserContext } from './(context)/UserContext'
-import { useEffect, useState } from 'react'
+import { useAuthContext } from './(context)/AuthContext'
+import { useState } from 'react'
 import Modal from './(components)/common/Modal'
 import { LoginForm, SignupForm } from './(components)/AuthForm'
 import { icons } from './(utils)/constants'
 
 export default function LandingPage() {
-  const { isAuthenticated } = useUserContext()
+  const { user } = useAuthContext()
   const [isLoginOrSignup, setIsLoginOrSignup] = useState(null)
   const isLogin = isLoginOrSignup === 'login'
   const [openModal, setOpenModal] = useState(false)
   const router = useRouter()
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/workspace/dashboard')
-    }
-  }, [isAuthenticated, router])
 
   const handleLoginModal = () => {
     setIsLoginOrSignup('login')
@@ -40,6 +35,10 @@ export default function LandingPage() {
 
   const date = new Date()
   const year = date.getFullYear()
+
+  if (user) {
+    router.push('/workspace/dashboard')
+  }
   return (
     <main className="flex flex-col items-center justify-between min-h-screen bg-gradient-radial from-chill-light-orange to-white text-black">
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>

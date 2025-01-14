@@ -45,7 +45,7 @@ export async function POST(req) {
     // Create new user with default role
     const newUser = await User.create({
       ...userData,
-      role: 'user', // Set default role
+      role: 'team member',
     })
 
     // Remove password from response

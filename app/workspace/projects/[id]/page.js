@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation'
 import Loading from '../../../(components)/common/Loading'
 
 const SingleProjectPage = ({ params }) => {
-  const { getProjectById } = useProjectContext()
+  const { getProjectById, updateProject } = useProjectContext()
   const { tickets } = useTicketContext()
   const [project, setProject] = useState(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -33,6 +33,17 @@ const SingleProjectPage = ({ params }) => {
 
     fetchProject()
   }, [params.id])
+
+  const handleUpdateProject = async (formData) => {
+    try {
+      await updateProject(project._id, formData)
+      setProject({ ...project, ...formData })
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setIsEditModalOpen(false)
+    }
+  }
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Not set'
@@ -78,7 +89,7 @@ const SingleProjectPage = ({ params }) => {
     <div className="p-6">
       <div className="mb-4">
         <button
-          onClick={() => router.push('/project')}
+          onClick={() => router.push('/workspace/projects')}
           className="flex items-center gap-2 text-gray-600 hover:text-chill-orange transition-colors group active:scale-95"
         >
           <span className="w-8 h-8 p-1 flex items-center justify-center rounded-full group-hover:bg-chill-orange/10 transition-colors">
@@ -157,6 +168,7 @@ const SingleProjectPage = ({ params }) => {
         <ProjectForm
           project={project}
           onClose={() => setIsEditModalOpen(false)}
+          onSubmit={handleUpdateProject}
         />
       </Modal>
     </div>

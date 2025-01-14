@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Avatar = ({ username, size = 'md' }) => {
+const Avatar = ({ username = '?', size = 'md' }) => {
   // Generate a consistent color hash for a username
   const getColorFromUsername = (name) => {
     const colors = [
@@ -13,6 +13,11 @@ const Avatar = ({ username, size = 'md' }) => {
       'bg-indigo-500',
       'bg-teal-500',
     ]
+
+    // Handle undefined/null username
+    if (!name || name === '?') {
+      return colors[0] // Return default color
+    }
 
     // Create a simple hash from username
     const hash = name.split('').reduce((acc, char) => {
@@ -38,7 +43,7 @@ const Avatar = ({ username, size = 'md' }) => {
 
   return (
     <div
-      className={`${sizeClasses[size]} ${bgColorClass} rounded-full flex items-center justify-center text-white shadow-md `}
+      className={`${sizeClasses[size]} ${bgColorClass} rounded-full flex items-center justify-center text-white shadow-md`}
       title={username}
     >
       {firstLetter}
