@@ -29,11 +29,6 @@ const TicketPage = () => {
     setSelectedTicket(null)
   }
 
-  const handleCreateTicket = () => {
-    setSelectedTicket(null)
-    setIsModalOpen(true)
-  }
-
   if (loading) {
     return <Loading />
   }

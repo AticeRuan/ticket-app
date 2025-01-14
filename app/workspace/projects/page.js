@@ -6,6 +6,7 @@ import ProjectForm from '../../(components)/ProjectFrom'
 import CreateButton from '../../(components)/common/CreateButton'
 import { useRouter } from 'next/navigation'
 import Card from '../../(components)/common/Card'
+import { icons } from '../../(utils)/constants'
 
 const ProjectPage = () => {
   const { projects, loading, error, fetchProjects, createProject } =
@@ -159,11 +160,15 @@ const ProjectPage = () => {
       </Card>
 
       {projects.length === 0 && !loading && (
-        <Card className="w-full p-8">
-          <div className="text-center text-gray-600">
+        <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+          <span className="w-16 h-16 mb-4">
+            {icons.ProjectIcon({ color: '#9ca3af' })}
+          </span>
+          <p className="text-lg">
+            {' '}
             No projects found. Create a new project to get started.
-          </div>
-        </Card>
+          </p>
+        </div>
       )}
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>

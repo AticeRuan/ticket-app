@@ -11,8 +11,13 @@ import { useRouter } from 'next/navigation'
 import Loading from '../../../(components)/common/Loading'
 
 const SingleProjectPage = ({ params }) => {
-  const { getProjectById, updateProject, deleteProject } = useProjectContext()
-  const { tickets } = useTicketContext()
+  const {
+    getProjectById,
+    updateProject,
+    deleteProject,
+    loading: isLoading,
+  } = useProjectContext()
+  const { tickets, fetchTickets } = useTicketContext()
   const [project, setProject] = useState(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -52,6 +57,7 @@ const SingleProjectPage = ({ params }) => {
 
     try {
       await deleteProject(project._id)
+      await fetchTickets()
       router.push('/workspace/projects')
     } catch (err) {
       console.error('Error deleting project:', err)
@@ -134,20 +140,13 @@ const SingleProjectPage = ({ params }) => {
             </div>
             <p className="text-gray-600 max-w-3xl">{project.description}</p>
           </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setIsEditModalOpen(true)}
-              className="px-4 py-2 bg-chill-orange text-white rounded-md hover:bg-opacity-90 transition-colors"
-            >
-              Edit Project
-            </button>
-            <button
-              onClick={() => setIsDeleteModalOpen(true)}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-opacity-90 transition-colors"
-            >
-              Delete Project
-            </button>
-          </div>
+
+          <button
+            onClick={() => setIsEditModalOpen(true)}
+            className="px-4 py-2 bg-chill-orange text-white rounded-md hover:bg-opacity-90 transition-colors"
+          >
+            Edit Project
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -190,6 +189,12 @@ const SingleProjectPage = ({ params }) => {
           </Card>
         )}
       </div>
+      <button
+        onClick={() => setIsDeleteModalOpen(true)}
+        className="px-4 py-2 bg-chill-orange/50 hover:bg-red-600 text-white rounded-md hover:bg-opacity-90 transition-colors w-full"
+      >
+        Delete Project
+      </button>
 
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
         <ProjectForm
@@ -204,8 +209,9 @@ const SingleProjectPage = ({ params }) => {
             Delete Project
           </h2>
           <p className="text-gray-600 mb-4">
-            This action cannot be undone. This will permanently delete the
-            project and all associated tickets.
+            This action cannot be undone. This will{' '}
+            <b className="text-chill-orange">permanently</b> delete the project
+            and all associated tickets.
           </p>
           <p className="mb-4">
             Please type <span className="font-semibold">{project.name}</span> to
@@ -220,22 +226,24 @@ const SingleProjectPage = ({ params }) => {
           />
 
           <div className="flex justify-end gap-3">
-            <button
-              onClick={handleCloseDeleteModal}
-              className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-            >
-              Cancel
-            </button>
+            {!isLoading && (
+              <button
+                onClick={handleCloseDeleteModal}
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+            )}
             <button
               onClick={handleDeleteProject}
-              disabled={deleteConfirmText !== project.name}
+              disabled={deleteConfirmText !== project.name || isLoading}
               className={`px-4 py-2 bg-red-600 text-white rounded-md ${
                 deleteConfirmText !== project.name
                   ? 'opacity-50 cursor-not-allowed'
                   : 'hover:bg-red-700'
               }`}
             >
-              Delete Project
+              {isLoading ? 'Deleting....' : 'Delete Project'}
             </button>
           </div>
         </div>

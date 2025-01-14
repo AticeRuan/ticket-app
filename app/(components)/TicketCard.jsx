@@ -17,19 +17,23 @@ const TicketCard = ({ ticket, onEdit }) => {
     }
     return new Date(timestamp).toLocaleDateString('en-US', options)
   }
-
+  console.log(ticket)
   return (
     <Card className="flex flex-col bg-white hover:shadow-lg hover:translate-y-1 rounded-xl shadow-md transition-all duration-300 group">
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-3 ">
         <div className="flex items-center gap-2">
           <span
             className="w-2 h-2 rounded-full"
             style={{
               backgroundColor:
-                ticket.status.toLowerCase() === 'completed'
-                  ? '#22c55e'
+                ticket.status.toLowerCase() === 'closed'
+                  ? '#3b82f6' // Green
                   : ticket.status.toLowerCase() === 'in progress'
-                  ? '#eab308'
+                  ? '#f59e0b' // Yellow
+                  : ticket.status.toLowerCase() === 'not started'
+                  ? '#ef4444' // Red
+                  : ticket.status.toLowerCase() === 'resolved'
+                  ? '#22c55e' // Orange
                   : '#ef4444',
             }}
           />

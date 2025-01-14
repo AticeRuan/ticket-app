@@ -3,20 +3,31 @@ import React from 'react'
 const StatusDisplay = ({ status }) => {
   const getColor = (status) => {
     let color = 'bg-slate-700'
-    switch (status.toLowerCase()) {
-      case 'completed':
+    switch (status) {
+      case 'Resolved':
+      case 'Completed':
         color = 'bg-green-200 text-green-700'
-        return color
-
-      case 'not started':
-        color = 'bg-red-200 text-red-700 '
-        return color
-      case 'in progress':
+        break
+      case 'Open':
+      case 'Not Started':
+        color = 'bg-red-200 text-red-700'
+        break
+      case 'In Progress':
         color = 'bg-chill-orange/50 text-chill-orange'
-        return color
+        break
+      case 'Closed':
+        color = 'bg-blue-200 text-blue-700'
+        break
+      case 'On Hold':
+        color = 'bg-yellow-200 text-yellow-700'
+        break
+      case 'Cancelled':
+        color = 'bg-gray-200 text-gray-700'
+        break
       default:
-        color
+        break
     }
+    return color
   }
 
   return (

@@ -8,6 +8,7 @@ const TicketForm = ({ ticket = {}, onClose }) => {
   const { loading, error, createTicket, updateTicket } = useTicketContext()
   const router = useRouter()
   const { projects, loading: loadingProject } = useProjectContext()
+  const [submitError, setSubmitError] = useState(null)
 
   const EDITMODE = ticket?._id && ticket._id !== 'new'
 
@@ -16,8 +17,8 @@ const TicketForm = ({ ticket = {}, onClose }) => {
     description: '',
     priority: '1',
     progress: '0',
-    status: 'not started',
-    project: '',
+    status: 'Open',
+    project: null,
     category: category[0].name,
     ...ticket,
   }
@@ -26,27 +27,41 @@ const TicketForm = ({ ticket = {}, onClose }) => {
 
   const handleChange = (e) => {
     const { value, name } = e.target
-    setFormData((prevData) => ({ ...prevData, [name]: value }))
+    setFormData((prevData) => ({ ...prevData, [name]: value || null }))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setSubmitError(null)
+
     try {
+      // Ensure all required fields are present
+      if (!formData.title || !formData.description) {
+        throw new Error('Title and description are required')
+      }
+
+      // Format data for submission
+      const ticketData = {
+        ...formData,
+        priority: parseInt(formData.priority, 10),
+        progress: parseInt(formData.progress, 10),
+        project: formData.project || null,
+        active: true,
+      }
+
       if (EDITMODE) {
-        await updateTicket(ticket._id, formData)
+        await updateTicket(ticket._id, ticketData)
       } else {
-        await createTicket(formData)
-        router.push('/tickets')
+        await createTicket(ticketData)
+        router.push('/workspace/tickets')
       }
       onClose()
     } catch (err) {
       console.error('Error submitting ticket:', err)
+      setSubmitError(err.message || 'Error submitting ticket')
     }
   }
 
-  if (error) {
-    return <div className="p-4 text-red-500">Error: {error}</div>
-  }
   if (loading || loadingProject) {
     return <div className="p-4">Loading...</div>
   }
@@ -56,6 +71,11 @@ const TicketForm = ({ ticket = {}, onClose }) => {
       <h3 className="text-xl font-bold mb-4">
         {EDITMODE ? 'Edit Ticket' : 'Create New Ticket'}
       </h3>
+      {submitError && (
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+          {submitError}
+        </div>
+      )}
       <form
         className="flex flex-col gap-4"
         method="POST"
@@ -110,10 +130,14 @@ const TicketForm = ({ ticket = {}, onClose }) => {
           <select
             id="project"
             name="project"
-            value={formData.category}
+            value={formData.project || null}
             onChange={handleChange}
             className="border rounded-md p-2"
           >
+            {' '}
+            <option value={null} className="">
+              No Related Project
+            </option>
             {projects.map((project) => (
               <option value={project._id} key={project._id}>
                 {project.name}
@@ -142,20 +166,6 @@ const TicketForm = ({ ticket = {}, onClose }) => {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium">Progress</label>
-          <input
-            type="range"
-            id="progress"
-            name="progress"
-            min="0"
-            max="100"
-            value={formData.progress}
-            onChange={handleChange}
-            className="w-full"
-          />
-        </div>
-
-        <div className="flex flex-col gap-1">
           <label className="text-sm font-medium">Status</label>
           <select
             id="status"
@@ -164,9 +174,10 @@ const TicketForm = ({ ticket = {}, onClose }) => {
             onChange={handleChange}
             className="border rounded-md p-2"
           >
-            <option value="not started">Not Started</option>
-            <option value="in progress">In Progress</option>
-            <option value="completed">Completed</option>
+            <option value="Open">Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Closed">Closed</option>
           </select>
         </div>
 
@@ -181,7 +192,7 @@ const TicketForm = ({ ticket = {}, onClose }) => {
           <button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-blue-300"
+            className="px-4 py-2 bg-chill-orange/90 text-white rounded-md hover:bg-chill-orange disabled:bg-blue-300"
           >
             {loading
               ? 'Saving...'
