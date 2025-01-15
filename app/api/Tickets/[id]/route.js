@@ -1,7 +1,6 @@
 import Ticket from '../../../(models)/ticket'
 import { NextResponse } from 'next/server'
 import { verifyJWT } from '../../(middlewares)/verifyJWT'
-imp
 
 export async function GET(req, { params }) {
   const authResponse = await verifyJWT(req)
