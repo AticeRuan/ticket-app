@@ -26,7 +26,7 @@ const CustomInput = forwardRef(
   ) => {
     // Base input classes
     const baseInputClasses =
-      'w-full px-3 py-2 border rounded-[55px] transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 h-[48px] shadow-md bg-white'
+      'w-full px-3 py-2 border border-white rounded-[55px] transition-colors focus:outline-none focus:ring-2  focus:shadow-md shadow-sm bg-white focus:ring-chill-orange h-11 sm:h-[48px] '
 
     // Generate input classes based on state
     const inputClasses = `
@@ -45,7 +45,7 @@ const CustomInput = forwardRef(
   `.trim()
 
     return (
-      <div className="relative ">
+      <div className="relative w-full ">
         {label && (
           <label htmlFor={name} className={labelClasses}>
             {label}
@@ -68,7 +68,7 @@ const CustomInput = forwardRef(
           minLength={minLength}
           maxLength={maxLength}
           pattern={pattern}
-          className={inputClasses}
+          className={`${inputClasses} `}
           aria-describedby={`${name}-error`}
           {...props}
         />

@@ -25,11 +25,11 @@ const CustomHeader = () => {
   }, [user])
 
   return (
-    <section className="flex items-center w-full  px-[40px] py-[25px] justify-between bg-chill-black sm:bg-transparent ">
+    <section className="flex items-center w-full  px-[40px] py-[25px] justify-between bg-chill-black/80 sm:bg-transparent fixed top-0 z-20 sm:static backdrop-blur-lg">
       <h1 className="text-chill-white sm:text-chill-black text-3xl sm:text-[40px] tracking-[0.16px] capitalize">
         {text}
       </h1>
-      <div className="flex items-center gap-1 sm:gap-[10px] justify-between sm:static absolute bottom-5 right-5 z-10">
+      <div className="flex items-center gap-1 sm:gap-[10px] justify-between bottom-5 right-5 z-10">
         <Avatar username={userName} />
         <button
           className={`w-[48px] h-[48px] flex items-center  justify-center rounded-full bg-chill-orange hover:opacity-75 active:scale-75 shadow-lg -ml-5 sm:ml-0 `}

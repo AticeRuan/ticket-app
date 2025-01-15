@@ -87,15 +87,9 @@ const TicketCard = ({ ticket }) => {
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Header Section */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 mb-4">
           <StatusDisplay status={ticket.status} />
-          <div
-            className={`transition-opacity duration-300 ${
-              isHovered ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <DeleteBlock id={ticket._id} user={user} />
-          </div>
+          <PriorityDisplay priority={ticket.priority} />
         </div>
 
         {/* Content Section */}
@@ -119,7 +113,6 @@ const TicketCard = ({ ticket }) => {
                 {ticket.category}
               </span>
             </div>
-            <PriorityDisplay priority={ticket.priority} />
           </div>
 
           {/* Owner and Date Section */}

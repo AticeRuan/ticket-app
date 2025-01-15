@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useAuthContext } from '../(context)/AuthContext'
 import CustomInput from './common/CustomInput'
 import { icons } from '../(utils)/constants'
@@ -8,6 +9,8 @@ import { icons } from '../(utils)/constants'
 export const LoginForm = ({ onFormTypeChange, onClose }) => {
   const { login, loading, error } = useAuthContext()
   const router = useRouter()
+  const pathname = usePathname()
+  const isHomePage = pathname === '/'
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -34,16 +37,18 @@ export const LoginForm = ({ onFormTypeChange, onClose }) => {
   }
 
   return (
-    <div className="flex justify-center py-8 md:py-16 lg:py-20 flex-col items-center bg-chill-light-orange rounded-2xl relative w-lg mx-auto px-2 sm:px-4 md:px-32 max-h-screen">
-      <button
-        className="w-4 h-4 md:w-8 md:h-8 absolute top-2 left-2 md:top-6 md:left-6 transition-transform hover:scale-110"
-        onClick={onClose}
-      >
-        {icons.BackIcon({ color: '#E65F2B' })}
-      </button>
+    <div className="flex justify-center py-8 md:py-16 lg:py-20 flex-col items-center bg-chill-light-orange rounded-2xl relative max-w-lg mx-auto px-2 sm:px-4 md:px-32 max-h-screen">
+      {isHomePage && (
+        <button
+          className="w-4 h-4 md:w-8 md:h-8 absolute top-2 left-2 md:top-6 md:left-6 transition-transform hover:scale-110"
+          onClick={onClose}
+        >
+          {icons.BackIcon({ color: '#E65F2B' })}
+        </button>
+      )}
 
       <form
-        className="flex flex-col w-full max-w-md px-4 sm:px-10 gap-4"
+        className="flex flex-col w-[300px] sm:w-[500px] px-4 md:px-6 gap-4"
         onSubmit={handleSubmit}
       >
         <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">Login</h3>
@@ -101,6 +106,8 @@ export const LoginForm = ({ onFormTypeChange, onClose }) => {
 export const SignupForm = ({ onFormTypeChange, onClose }) => {
   const { signup, loading, error } = useAuthContext()
   const router = useRouter()
+  const pathname = usePathname()
+  const isHomePage = pathname === '/'
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -129,16 +136,17 @@ export const SignupForm = ({ onFormTypeChange, onClose }) => {
   }
 
   return (
-    <div className="flex justify-center py-8 md:py-16 lg:py-20 flex-col items-center bg-chill-light-orange rounded-2xl relative w-lg mx-auto px-2 sm:px-4 md:px-32 max-h-screen">
-      <button
-        className="w-4 h-4 md:w-8 md:h-8 absolute top-2 left-2 md:top-6 md:left-6 transition-transform hover:scale-110"
-        onClick={onClose}
-      >
-        {icons.BackIcon({ color: '#E65F2B' })}
-      </button>
-
+    <div className="flex justify-center py-8 md:py-16 lg:py-20 flex-col items-center bg-chill-light-orange rounded-2xl relative max-w-lg mx-auto px-2 sm:px-4 md:px-32 max-h-screen">
+      {isHomePage && (
+        <button
+          className="w-4 h-4 md:w-8 md:h-8 absolute top-2 left-2 md:top-6 md:left-6 transition-transform hover:scale-110"
+          onClick={onClose}
+        >
+          {icons.BackIcon({ color: '#E65F2B' })}
+        </button>
+      )}
       <form
-        className="flex flex-col w-full max-w-sm px-4 md:px-6 gap-4"
+        className="flex flex-col w-[300px] sm:w-[500px] px-4 md:px-6 gap-4"
         onSubmit={handleSubmit}
       >
         <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">Sign Up</h3>
@@ -150,7 +158,7 @@ export const SignupForm = ({ onFormTypeChange, onClose }) => {
           value={formData.name}
           onChange={handleChange}
           required
-          className="w-full"
+          className="w-full "
           label="Name"
         />
 

@@ -8,7 +8,7 @@ import TicketForm from './TicketForm'
 import Modal from './common/Modal'
 
 const Nav = () => {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
   const pathname = usePathname()
 
   const [isModalOpen, setIsModalOpen] = useState(false)

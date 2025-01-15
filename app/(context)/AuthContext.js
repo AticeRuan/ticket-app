@@ -1,6 +1,7 @@
 'use client'
 import { createContext, useContext, useReducer, useEffect } from 'react'
 import jwt from 'jsonwebtoken'
+import { fetchWithAuth } from '../(utils)/fetchWithAuth'
 
 // Initial state
 const initialState = {
@@ -173,43 +174,39 @@ export const AuthProvider = ({ children }) => {
   // Initialize authentication state from token
   useEffect(() => {
     const initializeAuth = async () => {
+      dispatch({ type: ACTIONS.SET_LOADING, payload: true })
       const token = localStorage.getItem('token')
-      if (token) {
-        try {
-          // Verify token is valid
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/Auth/verify`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          )
 
-          if (!response.ok) {
-            if (response.status === 401) {
-              localStorage.removeItem('token')
-              dispatch({ type: ACTIONS.SET_AUTHENTICATED, payload: false })
-              dispatch({ type: ACTIONS.CLEAR_USER })
-            }
-            throw new Error('Token verification failed')
-          }
-
-          const decoded = jwt.decode(token)
-          if (decoded) {
-            dispatch({
-              type: ACTIONS.SET_USER,
-              payload: { ...decoded, token },
-            })
-          }
-        } catch (error) {
-          localStorage.removeItem('token')
-          dispatch({ type: ACTIONS.CLEAR_USER })
-        }
-      } else {
+      if (!token) {
         dispatch({ type: ACTIONS.SET_AUTHENTICATED, payload: false })
+        dispatch({ type: ACTIONS.SET_LOADING, payload: false })
+        return
       }
-      dispatch({ type: ACTIONS.SET_LOADING, payload: false })
+
+      try {
+        const response = await fetchWithAuth(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/Users`,
+        )
+
+        if (!response.ok) {
+          throw new Error('Token verification failed')
+        }
+
+        const decoded = jwt.decode(token)
+        if (decoded) {
+          dispatch({
+            type: ACTIONS.SET_USER,
+            payload: { ...decoded, token },
+          })
+        }
+      } catch (error) {
+        console.error('Auth initialization error:', error)
+        localStorage.removeItem('token')
+        dispatch({ type: ACTIONS.CLEAR_USER })
+        dispatch({ type: ACTIONS.SET_AUTHENTICATED, payload: false })
+      } finally {
+        dispatch({ type: ACTIONS.SET_LOADING, payload: false })
+      }
     }
 
     initializeAuth()

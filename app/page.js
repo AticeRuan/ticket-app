@@ -2,19 +2,18 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+
 import { useAuthContext } from './(context)/AuthContext'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Modal from './(components)/common/Modal'
 import { LoginForm, SignupForm } from './(components)/AuthForm'
 import { icons } from './(utils)/constants'
 
 export default function LandingPage() {
-  const { user } = useAuthContext()
+  const { user, isAuthenticated } = useAuthContext()
   const [isLoginOrSignup, setIsLoginOrSignup] = useState(null)
   const isLogin = isLoginOrSignup === 'login'
   const [openModal, setOpenModal] = useState(false)
-  const router = useRouter()
 
   const handleLoginModal = () => {
     setIsLoginOrSignup('login')
@@ -36,11 +35,6 @@ export default function LandingPage() {
   const date = new Date()
   const year = date.getFullYear()
 
-  // useEffect(() => {
-  //   if (user) {
-  //     router.replace('/workspace/dashboard')
-  //   }
-  // }, [user, router])
   return (
     <main className="flex flex-col items-center justify-between min-h-screen bg-gradient-radial from-chill-light-orange to-white text-black w-full">
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
@@ -68,7 +62,7 @@ export default function LandingPage() {
         </div>
 
         <nav className="flex gap-6">
-          {user ? (
+          {isAuthenticated ? (
             <div className="flex gap-1 flex-col items-end justify-center ">
               <p className="text-xs sm:text-sm">Welcome back {user.name}!</p>
               <Link
