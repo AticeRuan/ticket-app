@@ -42,7 +42,7 @@ export default function LandingPage() {
     }
   }, [user, router])
   return (
-    <main className="flex flex-col items-center justify-between min-h-screen bg-gradient-radial from-chill-light-orange to-white text-black">
+    <main className="flex flex-col items-center justify-between min-h-screen bg-gradient-radial from-chill-light-orange to-white text-black w-full">
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
         {isLogin ? (
           <LoginForm
