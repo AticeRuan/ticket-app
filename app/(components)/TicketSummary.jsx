@@ -1,39 +1,23 @@
+'use client'
 import React from 'react'
 import Card from './common/Card'
-import StatusDisplay from './StatusDisplay'
-import PriorityDisplay from './PriorityDisplay'
-
+import StatusDisplay from './common/StatusDisplay'
+import PriorityDisplay from './common/PriorityDisplay'
+import { useRouter } from 'next/navigation'
 const TicketSummary = ({ tickets, projects }) => {
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    })
-  }
+  const router = useRouter()
 
   return (
     <Card className="p-6  shadow-md">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg  mb-4">Ticket summary</h3>
-        <div className="flex space-x-4">
-          <select className="border rounded px-3 py-1 text-sm">
-            <option>Project</option>
-          </select>
-          <select className="border rounded px-3 py-1 text-sm">
-            <option>Ticket Owner</option>
-          </select>
-          <select className="border rounded px-3 py-1 text-sm">
-            <option>Status</option>
-          </select>
-        </div>
+      <div className="flex justify-start items-center mb-4">
+        <h3 className="text-lg  mb-4">Recent Tickets </h3>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="text-left border-b">
-              <th className="pb-3">Name</th>
+              <th className="pb-3 px-6 ">Name</th>
               <th className="pb-3">Category</th>
               <th className="pb-3">Project</th>
               <th className="pb-3">Priority</th>
@@ -43,11 +27,23 @@ const TicketSummary = ({ tickets, projects }) => {
           <tbody className="divide-y">
             {tickets?.slice(0, 5).map((ticket, index) => (
               <tr key={index} className="hover:bg-chill-white ">
-                <td className="py-4 capitalize">{ticket.title}</td>
-                {/* <td className="py-4">{ticket.owner || 'Unassigned'}</td> */}
-                <td className="py-4">{ticket.category}</td>
-                <td className="py-4">
-                  <span className="capitalize ">
+                <td
+                  className="py-4 capitalize hover:cursor-pointer hover:underline  px-6 text-sm"
+                  onClick={() => {
+                    router.push(`/workspace/tickets/${ticket._id}`)
+                  }}
+                >
+                  {ticket.title}
+                </td>
+
+                <td className="py-4 text-sm">{ticket.category}</td>
+                <td
+                  className="py-4 hover:cursor-pointer"
+                  onClick={() =>
+                    router.push(`/workspace/projects/${ticket.project}`)
+                  }
+                >
+                  <span className="capitalize  hover:underline text-sm">
                     {
                       projects.find((project) => project._id === ticket.project)
                         ?.name

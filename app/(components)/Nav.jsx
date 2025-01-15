@@ -32,8 +32,15 @@ const Nav = () => {
           collapsed ? 'px-[30px]' : 'px-[46px]'
         } pt-[140px] bg-chill-black  flex-col gap-[100px] relative items-center transition-all duration-300`}
       >
-        <div className="-mt-24 flex gap-4 items-center justify-center -ml-2">
-          <span className="w-10 h-10"> {icons.LogoIcon()} </span>
+        <div
+          className={`-mt-24 flex gap-4 items-center justify-center ${
+            collapsed ? 'ml-0' : '-ml-2'
+          }`}
+        >
+          <span className="w-10 h-10">
+            {' '}
+            {icons.LogoIcon({ collapsed: collapsed })}{' '}
+          </span>
 
           {!collapsed && (
             <h1 className="text-xl whitespace-nowrap font-bold text-chill-white">
@@ -54,10 +61,10 @@ const Nav = () => {
                 key={link.id}
                 text={link.name}
                 url={link.url}
-                active={pathname == link.url}
+                active={pathname.startsWith(link.url)}
                 collapse={collapsed}
                 icon={IconComponent}
-                iconColor={pathname == link.url ? '#E65F2B' : 'white'}
+                iconColor={pathname.startsWith(link.url) ? '#E65F2B' : 'white'}
               />
             )
           })}

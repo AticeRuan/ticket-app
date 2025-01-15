@@ -9,11 +9,19 @@ const TicketOwner = ({ owner = null }) => {
         <Avatar username={owner !== 'Unassigned' ? owner : '?'} size="sm" />
       )}
       <div className="flex flex-col">
-        <span className="text-sm font-medium text-gray-700">
-          {owner !== 'Unassigned' ? 'Assigned to' : 'Unassigned'}
+        <span
+          className={`${
+            isAssigned
+              ? 'text-xs  text-chill-black/70'
+              : 'text-sm  text-chill-black/80'
+          }`}
+        >
+          {isAssigned ? 'Assigned to' : 'Unassigned'}
         </span>
         {isAssigned && (
-          <span className="text-xs text-gray-500">{owner || 'No owner'}</span>
+          <span className="text-sm text-chill-black/80">
+            {owner || 'No owner'}
+          </span>
         )}
       </div>
     </div>

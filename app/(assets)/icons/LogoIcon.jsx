@@ -1,6 +1,7 @@
 import React from 'react'
 
-const LogoIcon = () => {
+const LogoIcon = (props = {}) => {
+  const { collapsed = false } = props
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -15,7 +16,15 @@ const LogoIcon = () => {
         </radialGradient>
       </defs>
 
-      <circle cx="50" cy="50" r="45" fill="#E65F2B" />
+      <rect
+        x="5"
+        y="5"
+        width="90"
+        height="90"
+        rx="15"
+        ry="15"
+        fill={collapsed ? '#ffffff' : '#E65F2B'}
+      />
 
       <path
         d="M30 30

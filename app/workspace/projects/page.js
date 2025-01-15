@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useProjectContext } from '../../(context)/ProjectContext'
 import Modal from '../../(components)/common/Modal'
 import ProjectForm from '../../(components)/ProjectFrom'
@@ -12,7 +12,16 @@ const ProjectPage = () => {
   const { projects, loading, error, fetchProjects, createProject } =
     useProjectContext()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' })
   const router = useRouter()
+
+  const handleSort = (key) => {
+    let direction = 'asc'
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc'
+    }
+    setSortConfig({ key, direction })
+  }
 
   const handleCreateProject = async (formData) => {
     await createProject(formData)
@@ -51,6 +60,80 @@ const ProjectPage = () => {
     return labels[priority] || priority
   }
 
+  const getSortedProjects = () => {
+    if (!sortConfig.key) return projects
+
+    return [...projects].sort((a, b) => {
+      if (sortConfig.key === 'name') {
+        return sortConfig.direction === 'asc'
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name)
+      }
+      if (sortConfig.key === 'status') {
+        return sortConfig.direction === 'asc'
+          ? a.status.localeCompare(b.status)
+          : b.status.localeCompare(a.status)
+      }
+      if (sortConfig.key === 'startDate') {
+        const dateA = new Date(a.startDate || 0)
+        const dateB = new Date(b.startDate || 0)
+        return sortConfig.direction === 'asc' ? dateA - dateB : dateB - dateA
+      }
+      if (sortConfig.key === 'dueDate') {
+        const dateA = new Date(a.dueDate || 0)
+        const dateB = new Date(b.dueDate || 0)
+        return sortConfig.direction === 'asc' ? dateA - dateB : dateB - dateA
+      }
+      if (sortConfig.key === 'priority') {
+        return sortConfig.direction === 'asc'
+          ? a.priority - b.priority
+          : b.priority - a.priority
+      }
+      if (sortConfig.key === 'budget') {
+        return sortConfig.direction === 'asc'
+          ? (a.budget || 0) - (b.budget || 0)
+          : (b.budget || 0) - (a.budget || 0)
+      }
+      return 0
+    })
+  }
+
+  const SortableHeader = ({ label, sortKey }) => {
+    const isActive = sortConfig.key === sortKey
+    return (
+      <th
+        className="px-6 py-3 text-left text-sm  text-chill-black/80 cursor-pointer hover:bg-chill-light-orange transition-colors"
+        onClick={() => handleSort(sortKey)}
+      >
+        <div className="flex items-center gap-2 whitespace-nowrap">
+          {label}
+          <div className="flex flex-col ">
+            <span
+              className={`w-3 h-3 transition-all ${
+                isActive && sortConfig.direction === 'asc'
+                  ? 'text-chill-orange'
+                  : 'text-gray-400'
+              }`}
+              style={{ transform: 'rotate(90deg)' }}
+            >
+              {icons.BackIcon({ color: 'currentColor' })}
+            </span>
+            <span
+              className={`w-3 h-3 transition-all ${
+                isActive && sortConfig.direction === 'desc'
+                  ? 'text-chill-orange'
+                  : 'text-gray-400'
+              }`}
+              style={{ transform: 'rotate(-90deg)' }}
+            >
+              {icons.BackIcon({ color: 'currentColor' })}
+            </span>
+          </div>
+        </div>
+      </th>
+    )
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-full">
@@ -70,7 +153,7 @@ const ProjectPage = () => {
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl text-gray-800">Projects Overview</h1>
+        <h1 className="text-2xl text-chill-black/80">Projects Overview</h1>
         <CreateButton
           onClick={() => setIsModalOpen(true)}
           text="New Project"
@@ -84,56 +167,43 @@ const ProjectPage = () => {
           <table className="w-full">
             <thead className="bg-chill-light-orange">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
-                  Project Name
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
-                  Start Date
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
-                  Due Date
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
-                  Priority
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">
-                  Budget
-                </th>
+                <SortableHeader label="Project Name" sortKey="name" />
+                <SortableHeader label="Status" sortKey="status" />
+                <SortableHeader label="Start Date" sortKey="startDate" />
+                <SortableHeader label="Due Date" sortKey="dueDate" />
+                <SortableHeader label="Priority" sortKey="priority" />
+                <SortableHeader label="Budget" sortKey="budget" />
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {projects.map((project) => (
+              {getSortedProjects().map((project) => (
                 <tr
                   key={project._id}
-                  className="hover:bg-gray-50 cursor-pointer"
+                  className="hover:bg-gray-50 cursor-pointer transition-colors"
                   onClick={() =>
                     router.push(`/workspace/projects/${project._id}`)
                   }
                 >
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-6 py-4 text-sm text-chill-black">
                     {project.name}
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
-                        project.status,
-                      )} whitespace-nowrap`}
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs 
+                       ${getStatusColor(project.status)} whitespace-nowrap`}
                     >
                       {project.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
+                  <td className="px-6 py-4 text-sm text-chill-black/70 whitespace-nowrap">
                     {formatDate(project.startDate)}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
+                  <td className="px-6 py-4 text-sm text-chill-black/70 whitespace-nowrap">
                     {formatDate(project.dueDate)}
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs whitespace-nowrap
                       ${
                         project.priority >= 4
                           ? 'bg-red-100 text-red-800'
@@ -161,7 +231,6 @@ const ProjectPage = () => {
             {icons.ProjectIcon({ color: '#9ca3af' })}
           </span>
           <p className="text-lg">
-            {' '}
             No projects found. Create a new project to get started.
           </p>
         </div>

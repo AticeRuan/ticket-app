@@ -10,8 +10,8 @@ import TicketForm from '../../../(components)/TicketForm'
 import Card from '../../../(components)/common/Card'
 import { icons } from '../../../(utils)/constants'
 import Loading from '../../../(components)/common/Loading'
-import PriorityDisplay from '../../../(components)/PriorityDisplay'
-import StatusDisplay from '../../../(components)/StatusDisplay'
+import PriorityDisplay from '../../../(components)/common/PriorityDisplay'
+import StatusDisplay from '../../../(components)/common/StatusDisplay'
 import { useUserContext } from '../../../(context)/UserContext'
 
 const SingleTicketPage = ({ params }) => {
@@ -146,13 +146,13 @@ const SingleTicketPage = ({ params }) => {
     <div className="p-6">
       <div className="mb-4">
         <button
-          onClick={() => router.push('/workspace/tickets')}
+          onClick={() => router.back()}
           className="flex items-center gap-2 text-gray-600 hover:text-chill-orange transition-colors group active:scale-95"
         >
           <span className="w-8 h-8 p-1 flex items-center justify-center rounded-full group-hover:bg-chill-orange/10 transition-colors">
             {icons.BackIcon({ color: 'currentColor' })}
           </span>
-          <span className="text-sm font-medium">Back to Tickets</span>
+          <span className="text-sm font-medium">Back</span>
         </button>
       </div>
 
@@ -187,7 +187,7 @@ const SingleTicketPage = ({ params }) => {
             {canClaim && (
               <button
                 onClick={() => setIsClaimModalOpen(true)}
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-opacity-90 transition-colors"
+                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-emerald-500  text-white rounded-md hover:opacity-90 transition-colors active:scale-95"
               >
                 Claim Ticket
               </button>
@@ -195,7 +195,7 @@ const SingleTicketPage = ({ params }) => {
             {canEdit && (
               <button
                 onClick={() => setIsEditModalOpen(true)}
-                className="px-4 py-2 bg-chill-orange text-white rounded-md hover:bg-opacity-90 transition-colors"
+                className="px-4 py-2 bg-chill-orange text-white rounded-md hover:opacity-90 transition-colors active:scale-95"
               >
                 Edit Ticket
               </button>

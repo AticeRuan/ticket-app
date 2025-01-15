@@ -114,13 +114,13 @@ const SingleProjectPage = ({ params }) => {
     <div className="p-6">
       <div className="mb-4">
         <button
-          onClick={() => router.push('/workspace/projects')}
+          onClick={() => router.back()}
           className="flex items-center gap-2 text-gray-600 hover:text-chill-orange transition-colors group active:scale-95"
         >
           <span className="w-8 h-8 p-1 flex items-center justify-center rounded-full group-hover:bg-chill-orange/10 transition-colors">
             {icons.BackIcon({ color: 'currentColor' })}
           </span>
-          <span className="text-sm font-medium">Back to Projects</span>
+          <span className="text-sm font-medium">Back</span>
         </button>
       </div>
       <Card className="mb-8">
@@ -143,7 +143,7 @@ const SingleProjectPage = ({ params }) => {
 
           <button
             onClick={() => setIsEditModalOpen(true)}
-            className="px-4 py-2 bg-chill-orange text-white rounded-md hover:bg-opacity-90 transition-colors"
+            className="px-4 py-2 bg-chill-orange text-white rounded-md hover:bg-opacity-90 transition-colors active:scale-95 "
           >
             Edit Project
           </button>

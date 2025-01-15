@@ -1,7 +1,7 @@
 import React from 'react'
 import Card from './common/Card'
 import ProgressBar from './ProgressBar'
-import StatusDisplay from './StatusDisplay'
+import StatusDisplay from './common/StatusDisplay'
 
 const ProjectCard = ({ project, onEdit }) => {
   // Format dates for display

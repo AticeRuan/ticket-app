@@ -92,7 +92,7 @@ export default function LandingPage() {
         </p>
 
         <button
-          className="px-8 py-4 bg-chill-orange text-white rounded-md hover:bg-orange-600 transition"
+          className="px-8 py-4 bg-chill-orange text-white rounded-md hover:bg-orange-600 transition active:scale-95"
           onClick={handleSignupModal}
         >
           Get Started
