@@ -16,7 +16,6 @@ const CustomHeader = () => {
 
   const handleLogout = () => {
     logout()
-    router.push('/')
   }
 
   useEffect(() => {

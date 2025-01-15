@@ -34,7 +34,7 @@ export const LoginForm = ({ onFormTypeChange, onClose }) => {
   }
 
   return (
-    <div className="flex justify-center py-8 md:py-16 lg:py-20 flex-col items-center bg-chill-light-orange rounded-2xl relative w-full max-w-md mx-auto px-2 sm:px-4 max-h-screen">
+    <div className="flex justify-center py-8 md:py-16 lg:py-20 flex-col items-center bg-chill-light-orange rounded-2xl relative w-lg mx-auto px-2 sm:px-4 md:px-32 max-h-screen">
       <button
         className="w-4 h-4 md:w-8 md:h-8 absolute top-2 left-2 md:top-6 md:left-6 transition-transform hover:scale-110"
         onClick={onClose}
@@ -43,7 +43,7 @@ export const LoginForm = ({ onFormTypeChange, onClose }) => {
       </button>
 
       <form
-        className="flex flex-col w-full max-w-sm px-4 md:px-6 gap-4"
+        className="flex flex-col w-full max-w-md px-4 sm:px-10 gap-4"
         onSubmit={handleSubmit}
       >
         <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">Login</h3>
@@ -129,7 +129,7 @@ export const SignupForm = ({ onFormTypeChange, onClose }) => {
   }
 
   return (
-    <div className="flex justify-center py-8 md:py-16 lg:py-20 flex-col items-center bg-chill-light-orange rounded-2xl relative w-full max-w-md mx-auto px-2 sm:px-4 max-h-screen">
+    <div className="flex justify-center py-8 md:py-16 lg:py-20 flex-col items-center bg-chill-light-orange rounded-2xl relative w-lg mx-auto px-2 sm:px-4 md:px-32 max-h-screen">
       <button
         className="w-4 h-4 md:w-8 md:h-8 absolute top-2 left-2 md:top-6 md:left-6 transition-transform hover:scale-110"
         onClick={onClose}

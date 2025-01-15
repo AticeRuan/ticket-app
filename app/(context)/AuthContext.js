@@ -7,6 +7,7 @@ const initialState = {
   user: null,
   loading: false,
   error: null,
+  isAuthenticated: false,
 }
 
 // Action types
@@ -15,6 +16,7 @@ export const ACTIONS = {
   SET_ERROR: 'SET_ERROR',
   SET_USER: 'SET_USER',
   CLEAR_USER: 'CLEAR_USER',
+  SET_AUTHENTICATED: 'SET_AUTHENTICATED',
 }
 
 // Reducer function
@@ -28,13 +30,19 @@ const authReducer = (state, action) => {
       return {
         ...state,
         user: action.payload,
-
+        isAuthenticated: true,
         error: null,
       }
     case ACTIONS.CLEAR_USER:
       return {
         ...state,
         user: null,
+        isAuthenticated: false,
+      }
+    case ACTIONS.SET_AUTHENTICATED:
+      return {
+        ...state,
+        isAuthenticated: action.payload,
       }
     default:
       return state
@@ -63,6 +71,9 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json()
 
       if (!res.ok) {
+        if (res.status === 401) {
+          dispatch({ type: ACTIONS.SET_AUTHENTICATED, payload: false })
+        }
         throw new Error(data.message || 'Login failed')
       }
 
@@ -113,6 +124,9 @@ export const AuthProvider = ({ children }) => {
       const signupData = await signupRes.json()
 
       if (!signupRes.ok) {
+        if (signupRes.status === 401) {
+          dispatch({ type: ACTIONS.SET_AUTHENTICATED, payload: false })
+        }
         throw new Error(signupData.message || 'Signup failed')
       }
 
@@ -134,6 +148,9 @@ export const AuthProvider = ({ children }) => {
       const loginData = await loginRes.json()
 
       if (!loginRes.ok) {
+        if (loginRes.status === 401) {
+          dispatch({ type: ACTIONS.SET_AUTHENTICATED, payload: false })
+        }
         throw new Error(loginData.message || 'Auto-login failed')
       }
 
@@ -159,6 +176,25 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token')
       if (token) {
         try {
+          // Verify token is valid
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/Auth/verify`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          )
+
+          if (!response.ok) {
+            if (response.status === 401) {
+              localStorage.removeItem('token')
+              dispatch({ type: ACTIONS.SET_AUTHENTICATED, payload: false })
+              dispatch({ type: ACTIONS.CLEAR_USER })
+            }
+            throw new Error('Token verification failed')
+          }
+
           const decoded = jwt.decode(token)
           if (decoded) {
             dispatch({
@@ -170,6 +206,8 @@ export const AuthProvider = ({ children }) => {
           localStorage.removeItem('token')
           dispatch({ type: ACTIONS.CLEAR_USER })
         }
+      } else {
+        dispatch({ type: ACTIONS.SET_AUTHENTICATED, payload: false })
       }
       dispatch({ type: ACTIONS.SET_LOADING, payload: false })
     }
@@ -181,6 +219,7 @@ export const AuthProvider = ({ children }) => {
     user: state.user,
     loading: state.loading,
     error: state.error,
+    isAuthenticated: state.isAuthenticated,
     login,
     logout,
     signup,
