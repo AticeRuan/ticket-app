@@ -36,11 +36,11 @@ export default function LandingPage() {
   const date = new Date()
   const year = date.getFullYear()
 
-  useEffect(() => {
-    if (user) {
-      router.push('/workspace/dashboard')
-    }
-  }, [user, router])
+  // useEffect(() => {
+  //   if (user) {
+  //     router.replace('/workspace/dashboard')
+  //   }
+  // }, [user, router])
   return (
     <main className="flex flex-col items-center justify-between min-h-screen bg-gradient-radial from-chill-light-orange to-white text-black w-full">
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
@@ -60,23 +60,40 @@ export default function LandingPage() {
       <header className="w-full p-6 flex justify-between items-center bg-chill-black text-white">
         <div className="flex gap-2 items-center">
           {' '}
-          <span className="w-8 h-8 mt-1"> {icons.LogoIcon()} </span>{' '}
-          <h1 className="text-3xl font-bold">Ticket Axis </h1>
+          <span className="w-6 sm:w-8 h-6 sm:h-8 mt-1">
+            {' '}
+            {icons.LogoIcon()}{' '}
+          </span>{' '}
+          <h1 className="text-xl sm:text-3xl font-bold">Ticket Axis </h1>
         </div>
 
         <nav className="flex gap-6">
-          <button
-            onClick={handleLoginModal}
-            className="hover:text-chill-orange"
-          >
-            Login
-          </button>
-          <button
-            onClick={handleSignupModal}
-            className="hover:text-chill-orange"
-          >
-            Sign Up
-          </button>
+          {user ? (
+            <div className="flex gap-1 flex-col items-end justify-center ">
+              <p className="text-xs sm:text-sm">Welcome back {user.name}!</p>
+              <Link
+                href="/workspace/dashboard"
+                className="hover:text-chill-orange bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-emerald-500 transition-all duration-700 p-1 rounded-md sm:text-base"
+              >
+                Go to WorkSpace
+              </Link>
+            </div>
+          ) : (
+            <>
+              <button
+                onClick={handleLoginModal}
+                className="hover:text-chill-orange text-xs sm:text-base"
+              >
+                Login
+              </button>
+              <button
+                onClick={handleSignupModal}
+                className="hover:text-chill-orange text-xs sm:text-base"
+              >
+                Sign Up
+              </button>
+            </>
+          )}
         </nav>
       </header>
 
@@ -143,9 +160,9 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="w-full p-6 bg-chill-black text-white flex justify-between">
+      <footer className="text-xs md:text-base w-full p-6 bg-chill-black text-white flex justify-between ">
         <p>&copy; {year} Chill Otters. All rights reserved.</p>
-        <nav className="flex gap-4">
+        <nav className="flex gap-2 md:gap-4">
           <Link href="/" className="hover:text-chill-orange">
             About
           </Link>

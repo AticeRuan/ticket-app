@@ -26,14 +26,14 @@ const CustomHeader = () => {
   }, [user])
 
   return (
-    <section className="flex items-center w-full  px-[40px] py-[25px] justify-between">
-      <h1 className="text-chill-black text-[40px] tracking-[0.16px] capitalize">
+    <section className="flex items-center w-full  px-[40px] py-[25px] justify-between bg-chill-black sm:bg-transparent ">
+      <h1 className="text-chill-white sm:text-chill-black text-3xl sm:text-[40px] tracking-[0.16px] capitalize">
         {text}
       </h1>
-      <div className="flex items-center gap-[10px] justify-between ">
+      <div className="flex items-center gap-1 sm:gap-[10px] justify-between sm:static absolute bottom-5 right-5 z-10">
         <Avatar username={userName} />
         <button
-          className={`w-[48px] h-[48px] flex items-center justify-center rounded-full bg-chill-orange hover:opacity-75 active:scale-75 shadow-lg`}
+          className={`w-[48px] h-[48px] flex items-center  justify-center rounded-full bg-chill-orange hover:opacity-75 active:scale-75 shadow-lg -ml-5 sm:ml-0 `}
           onClick={handleLogout}
         >
           <span className="w-[34px] h-[34px] rounded-full p-[5px] ">

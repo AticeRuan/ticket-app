@@ -1,10 +1,8 @@
-// app/(components)/AuthForms.jsx
 'use client'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthContext } from '../(context)/AuthContext'
 import CustomInput from './common/CustomInput'
-
 import { icons } from '../(utils)/constants'
 
 export const LoginForm = ({ onFormTypeChange, onClose }) => {
@@ -36,13 +34,19 @@ export const LoginForm = ({ onFormTypeChange, onClose }) => {
   }
 
   return (
-    <div className="flex justify-center py-32 flex-col items-center bg-chill-light-orange rounded-2xl relative ">
-      <button className="w-8 h-8 absolute top-10 left-10  " onClick={onClose}>
-        {' '}
+    <div className="flex justify-center py-8 md:py-16 lg:py-20 flex-col items-center bg-chill-light-orange rounded-2xl relative w-full max-w-md mx-auto px-2 sm:px-4 max-h-screen">
+      <button
+        className="w-4 h-4 md:w-8 md:h-8 absolute top-2 left-2 md:top-6 md:left-6 transition-transform hover:scale-110"
+        onClick={onClose}
+      >
         {icons.BackIcon({ color: '#E65F2B' })}
       </button>
-      <form className="flex flex-col  w-1/2 gap-4" onSubmit={handleSubmit}>
-        <h3 className="text-2xl font-bold mb-4">Login</h3>
+
+      <form
+        className="flex flex-col w-full max-w-sm px-4 md:px-6 gap-4"
+        onSubmit={handleSubmit}
+      >
+        <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">Login</h3>
 
         <CustomInput
           type="email"
@@ -51,9 +55,10 @@ export const LoginForm = ({ onFormTypeChange, onClose }) => {
           value={formData.email}
           onChange={handleChange}
           required
-          className="p-2 "
+          className="w-full"
           label="Email"
         />
+
         <CustomInput
           type="password"
           name="password"
@@ -61,21 +66,28 @@ export const LoginForm = ({ onFormTypeChange, onClose }) => {
           value={formData.password}
           onChange={handleChange}
           required
-          className="p-2 "
+          className="w-full"
           label="Password"
         />
 
-        <button type="submit" disabled={loading} className="btn mt-4">
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-chill-orange text-white py-3 rounded-full mt-4 hover:bg-opacity-90 transition-colors disabled:opacity-50"
+        >
           {loading ? 'Logging in...' : 'Login'}
         </button>
 
-        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+        {error && (
+          <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
+        )}
       </form>
-      <div className="text-center mt-4">
-        <p>
-          Don&apos;t have an account?
+
+      <div className="text-center mt-6">
+        <p className="text-sm">
+          Don&apos;t have an account?{' '}
           <button
-            className="text-chill-orange hover:opacity-70 ml-1"
+            className="text-chill-orange hover:opacity-70 font-medium"
             onClick={handleFormTypeChange}
           >
             Sign up
@@ -111,17 +123,25 @@ export const SignupForm = ({ onFormTypeChange, onClose }) => {
       router.push('/workspace/dashboard')
     }
   }
+
   const handleFormTypeChange = () => {
     onFormTypeChange('login')
   }
+
   return (
-    <div className="flex justify-center py-32 flex-col items-center bg-chill-light-orange rounded-2xl relative">
-      <button className="w-8 h-8 absolute top-10 left-10 " onClick={onClose}>
-        {' '}
+    <div className="flex justify-center py-8 md:py-16 lg:py-20 flex-col items-center bg-chill-light-orange rounded-2xl relative w-full max-w-md mx-auto px-2 sm:px-4 max-h-screen">
+      <button
+        className="w-4 h-4 md:w-8 md:h-8 absolute top-2 left-2 md:top-6 md:left-6 transition-transform hover:scale-110"
+        onClick={onClose}
+      >
         {icons.BackIcon({ color: '#E65F2B' })}
       </button>
-      <form className="flex flex-col gap-3 w-1/2 " onSubmit={handleSubmit}>
-        <h3 className="text-2xl font-bold mb-4">Sign Up</h3>
+
+      <form
+        className="flex flex-col w-full max-w-sm px-4 md:px-6 gap-4"
+        onSubmit={handleSubmit}
+      >
+        <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">Sign Up</h3>
 
         <CustomInput
           type="text"
@@ -130,9 +150,10 @@ export const SignupForm = ({ onFormTypeChange, onClose }) => {
           value={formData.name}
           onChange={handleChange}
           required
-          className="p-2 border rounded"
+          className="w-full"
           label="Name"
         />
+
         <CustomInput
           type="email"
           name="email"
@@ -140,9 +161,10 @@ export const SignupForm = ({ onFormTypeChange, onClose }) => {
           value={formData.email}
           onChange={handleChange}
           required
-          className="p-2 border rounded"
+          className="w-full"
           label="Email"
         />
+
         <CustomInput
           type="password"
           name="password"
@@ -151,9 +173,10 @@ export const SignupForm = ({ onFormTypeChange, onClose }) => {
           onChange={handleChange}
           required
           minLength={6}
-          className="p-2 border rounded"
+          className="w-full"
           label="Password"
         />
+
         <CustomInput
           type="password"
           name="secretKey"
@@ -161,22 +184,29 @@ export const SignupForm = ({ onFormTypeChange, onClose }) => {
           value={secretKey}
           onChange={(e) => setSecretKey(e.target.value)}
           required
-          className="p-2 border rounded"
+          className="w-full"
           label="Secret Key"
         />
 
-        <button type="submit" disabled={loading} className="btn mt-4">
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-chill-orange text-white py-3 rounded-full mt-4 hover:bg-opacity-90 transition-colors disabled:opacity-50"
+        >
           {loading ? 'Creating Account...' : 'Sign Up'}
         </button>
 
-        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+        {error && (
+          <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
+        )}
       </form>
-      <div className="text-center mt-4">
-        <p>
-          Already have an account?
+
+      <div className="text-center mt-6">
+        <p className="text-sm">
+          Already have an account?{' '}
           <button
+            className="text-chill-orange hover:opacity-70 font-medium"
             onClick={handleFormTypeChange}
-            className="text-chill-orange hover:opacity-70 ml-1"
           >
             Login
           </button>

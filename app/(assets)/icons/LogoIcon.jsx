@@ -36,7 +36,7 @@ const LogoIcon = (props = {}) => {
              V38
              H30
              Z"
-        fill="#060606"
+        fill={collapsed ? '#E65F2B' : '#060606'}
         strokeWidth="2"
       />
     </svg>

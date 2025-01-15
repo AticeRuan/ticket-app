@@ -110,7 +110,7 @@ const TicketCard = ({ ticket }) => {
           </div>
 
           {/* Category and Priority Section */}
-          <div className="flex items-center justify-between py-2 ">
+          <div className="flex items-start justify-between py-2 flex-col sm:flex-row gap-2  ">
             <div className="flex items-center gap-2">
               <span className="w-4 h-4">
                 {icons.ProjectIcon({ color: '#6b7280' })}
@@ -141,7 +141,7 @@ const TicketCard = ({ ticket }) => {
             {ticket.status === 'Open' && !ticket.owner && (
               <button
                 onClick={() => setIsClaimModalOpen(true)}
-                className="flex-1 px-4 py-2 bg-blue-green-600 text-white rounded-md hover:shadow-lg hover:rounded-full transition-all duration-500 active:scale-95 bg-gradient-to-r from-blue-500 to-emerald-500  text-sm font-medium"
+                className="flex-1 px-4 py-2 bg-blue-green-600 text-white rounded-md hover:shadow-lg hover:rounded-full transition-all duration-500 active:scale-95 bg-gradient-to-r from-blue-500 to-emerald-500  text-sm "
               >
                 Claim Ticket
               </button>

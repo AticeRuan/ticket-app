@@ -46,7 +46,7 @@ const SingleProjectPage = ({ params }) => {
       await updateProject(project._id, formData)
       setProject({ ...project, ...formData })
     } catch (err) {
-      console.log(err)
+      console.error(err)
     } finally {
       setIsEditModalOpen(false)
     }
@@ -111,7 +111,7 @@ const SingleProjectPage = ({ params }) => {
   )
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <div className="mb-4">
         <button
           onClick={() => router.back()}
@@ -124,32 +124,34 @@ const SingleProjectPage = ({ params }) => {
         </button>
       </div>
       <Card className="mb-8">
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <div className="flex items-center gap-4 mb-2">
-              <h1 className="text-3xl font-bold text-gray-800">
+        <div className="flex flex-col md:flex-row justify-between items-start mb-6">
+          <div className="flex-1">
+            <div className="flex md:items-center gap-4 mb-2 flex-col sm:flex-row ">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
                 {project.name}
               </h1>
               <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                className={`px-3 py-1 w-fit  rounded-full text-sm font-medium ${getStatusColor(
                   project.status,
                 )}`}
               >
                 {project.status}
               </span>
             </div>
-            <p className="text-gray-600 max-w-3xl">{project.description}</p>
+            <p className="text-gray-600 max-w-3xl break-words">
+              {project.description}
+            </p>
           </div>
 
           <button
             onClick={() => setIsEditModalOpen(true)}
-            className="px-4 py-2 bg-chill-orange text-white rounded-md hover:bg-opacity-90 transition-colors active:scale-95 "
+            className="mt-4 md:mt-0 px-4 py-2 bg-chill-orange text-white rounded-md hover:bg-opacity-90 transition-colors active:scale-95"
           >
             Edit Project
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="flex flex-col">
             <span className="text-gray-500 text-sm">Start Date</span>
             <span className="font-medium">{formatDate(project.startDate)}</span>
@@ -172,11 +174,11 @@ const SingleProjectPage = ({ params }) => {
       </Card>
 
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">
           Project Tickets
         </h2>
         {projectTickets.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {projectTickets.map((ticket) => (
               <TicketCard key={ticket._id} ticket={ticket} />
             ))}
@@ -191,7 +193,7 @@ const SingleProjectPage = ({ params }) => {
       </div>
       <button
         onClick={() => setIsDeleteModalOpen(true)}
-        className="px-4 py-2 bg-chill-orange/50 hover:bg-red-600 text-white rounded-md hover:bg-opacity-90 transition-colors w-full"
+        className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 w-full transition-colors"
       >
         Delete Project
       </button>
@@ -225,7 +227,7 @@ const SingleProjectPage = ({ params }) => {
             placeholder="Enter project name"
           />
 
-          <div className="flex justify-end gap-3">
+          <div className="flex flex-col sm:flex-row justify-end gap-3">
             {!isLoading && (
               <button
                 onClick={handleCloseDeleteModal}
@@ -237,7 +239,7 @@ const SingleProjectPage = ({ params }) => {
             <button
               onClick={handleDeleteProject}
               disabled={deleteConfirmText !== project.name || isLoading}
-              className={`px-4 py-2 bg-red-600 text-white rounded-md ${
+              className={`px-4 py-2 bg-red-600 text-white rounded-md $ {
                 deleteConfirmText !== project.name
                   ? 'opacity-50 cursor-not-allowed'
                   : 'hover:bg-red-700'

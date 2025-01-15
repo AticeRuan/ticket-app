@@ -27,8 +27,8 @@ const SingleTicketPage = ({ params }) => {
   const [error, setError] = useState(null)
   const router = useRouter()
   const [ownerName, setOwnerName] = useState('Unassigned')
+
   useEffect(() => {
-    // Only run if ticket exists
     if (!ticket) return
 
     const fetchOwnerName = () => {
@@ -46,9 +46,8 @@ const SingleTicketPage = ({ params }) => {
     }
 
     fetchOwnerName()
-  }, [ticket, users]) // Change dependency to ticket instead of ticket.owner
+  }, [ticket, users])
 
-  // Fetch ticket and project effect remains the same
   useEffect(() => {
     const fetchTicketAndProject = async () => {
       try {
@@ -89,7 +88,6 @@ const SingleTicketPage = ({ params }) => {
 
   const handleClaimTicket = async () => {
     try {
-      // Construct update data maintaining all existing ticket fields
       const updatedTicketData = {
         ...ticket,
         status: 'In Progress',
@@ -99,7 +97,6 @@ const SingleTicketPage = ({ params }) => {
       await updateTicket(ticket._id, updatedTicketData)
       setIsClaimModalOpen(false)
 
-      // Fetch tickets to update the UI with the latest data
       if (typeof fetchTickets === 'function') {
         await fetchTickets()
       }
@@ -123,18 +120,15 @@ const SingleTicketPage = ({ params }) => {
     (ticket?.owner?.id === user.userId ||
       ticket?.status === 'Open' ||
       user.role === 'admin')
-
   const canClaim = user && ticket?.status === 'Open' && !ticket?.owner
 
   if (loading) return <Loading />
-
   if (error)
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-lg text-red-600">Error: {error}</div>
       </div>
     )
-
   if (!ticket)
     return (
       <div className="flex items-center justify-center h-full">
@@ -143,99 +137,114 @@ const SingleTicketPage = ({ params }) => {
     )
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
+      {/* Back Button */}
       <div className="mb-4">
         <button
           onClick={() => router.back()}
           className="flex items-center gap-2 text-gray-600 hover:text-chill-orange transition-colors group active:scale-95"
         >
-          <span className="w-8 h-8 p-1 flex items-center justify-center rounded-full group-hover:bg-chill-orange/10 transition-colors">
+          <span className="w-8 h-8 p-1 flex items-center justify-center rounded-full group-hover:bg-chill-orange/10">
             {icons.BackIcon({ color: 'currentColor' })}
           </span>
           <span className="text-sm font-medium">Back</span>
         </button>
       </div>
 
+      {/* Main Card */}
       <Card className="mb-8">
-        <div className="flex justify-between items-start mb-6">
-          <div className="flex-1">
-            <div className="flex items-center gap-4 mb-2">
-              <h1 className="text-3xl font-bold text-gray-800 capitalize">
-                {ticket.title}
-              </h1>
+        <div className="space-y-6">
+          {/* Header Section */}
+          <div className="flex flex-col space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-xl md:text-3xl font-bold text-gray-800 capitalize break-words">
+                  {ticket.title}
+                </h1>
+              </div>
               <StatusDisplay status={ticket.status} />
             </div>
 
-            {project && (
-              <Link
-                href={`/workspace/projects/${project._id}`}
-                className="inline-flex items-center gap-2 text-chill-orange hover:opacity-80 mb-4"
-              >
-                <span className="w-4 h-4">
-                  {icons.ProjectIcon({ color: 'currentColor' })}
-                </span>
-                <span className="font-medium">{project.name}</span>
-              </Link>
-            )}
+            {/* Action Buttons */}
+            <div className="flex flex-wrap gap-2">
+              {canClaim && (
+                <button
+                  onClick={() => setIsClaimModalOpen(true)}
+                  className="flex-1 sm:flex-none px-4 py-2 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-md hover:opacity-90 transition-colors active:scale-95"
+                >
+                  Claim Ticket
+                </button>
+              )}
+              {canEdit && (
+                <button
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="flex-1 sm:flex-none px-4 py-2 bg-chill-orange text-white rounded-md hover:opacity-90 transition-colors active:scale-95"
+                >
+                  Edit Ticket
+                </button>
+              )}
+            </div>
+          </div>
 
-            <p className="text-gray-600 max-w-3xl whitespace-pre-wrap">
+          {/* Project Link */}
+          {project && (
+            <Link
+              href={`/workspace/projects/${project._id}`}
+              className="inline-flex items-center gap-2 text-chill-orange hover:opacity-80"
+            >
+              <span className="w-4 h-4">
+                {icons.ProjectIcon({ color: 'currentColor' })}
+              </span>
+              <span className="font-medium">{project.name}</span>
+            </Link>
+          )}
+
+          {/* Description */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <p className="text-gray-600 whitespace-pre-wrap break-words">
               {ticket.description}
             </p>
           </div>
 
-          <div className="flex gap-2">
-            {canClaim && (
-              <button
-                onClick={() => setIsClaimModalOpen(true)}
-                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-emerald-500  text-white rounded-md hover:opacity-90 transition-colors active:scale-95"
-              >
-                Claim Ticket
-              </button>
-            )}
-            {canEdit && (
-              <button
-                onClick={() => setIsEditModalOpen(true)}
-                className="px-4 py-2 bg-chill-orange text-white rounded-md hover:opacity-90 transition-colors active:scale-95"
-              >
-                Edit Ticket
-              </button>
-            )}
-          </div>
-        </div>
+          {/* Details Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="space-y-1">
+              <span className="text-gray-500 text-sm">Category</span>
+              <span className="block font-medium capitalize">
+                {ticket.category}
+              </span>
+            </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-          <div className="flex flex-col">
-            <span className="text-gray-500 text-sm">Category</span>
-            <span className="font-medium capitalize">{ticket.category}</span>
-          </div>
+            <div className="space-y-1">
+              <span className="text-gray-500 text-sm">Priority</span>
+              <div className="mt-1">
+                <PriorityDisplay priority={ticket.priority} />
+              </div>
+            </div>
 
-          <div className="flex flex-col">
-            <span className="text-gray-500 text-sm">Priority</span>
-            <div className="mt-1">
-              <PriorityDisplay priority={ticket.priority} />
+            <div className="space-y-1">
+              <span className="text-gray-500 text-sm">Owner</span>
+              <span className="block font-medium">{ownerName}</span>
             </div>
           </div>
 
-          <div className="flex flex-col">
-            <span className="text-gray-500 text-sm">Owner</span>
-            <span className="font-medium">{ownerName || 'Unassigned'}</span>
-          </div>
-        </div>
-
-        <div className="border-t border-gray-200 pt-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="text-gray-500">Created:</span>
-              <span className="ml-2">{formatDate(ticket.createdAt)}</span>
-            </div>
-            <div>
-              <span className="text-gray-500">Last Updated:</span>
-              <span className="ml-2">{formatDate(ticket.updatedAt)}</span>
+          {/* Timestamps */}
+          <div className="border-t border-gray-200 pt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+              <div className="space-y-1">
+                <span className="block text-gray-500">Created:</span>
+                <span className="block">{formatDate(ticket.createdAt)}</span>
+              </div>
+              <div className="space-y-1">
+                <span className="block text-gray-500">Last Updated:</span>
+                <span className="block">{formatDate(ticket.updatedAt)}</span>
+              </div>
             </div>
           </div>
         </div>
       </Card>
 
+      {/* Modals */}
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
         <TicketForm
           ticket={ticket}
@@ -251,7 +260,7 @@ const SingleTicketPage = ({ params }) => {
         <div className="p-6">
           <h3 className="text-lg font-semibold mb-4">Confirm Claim</h3>
           <p className="mb-6">Are you sure you want to claim this ticket?</p>
-          <div className="flex justify-end gap-3">
+          <div className="flex flex-col sm:flex-row justify-end gap-3">
             <button
               onClick={() => setIsClaimModalOpen(false)}
               className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"

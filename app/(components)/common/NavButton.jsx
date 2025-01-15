@@ -8,6 +8,7 @@ const NavButton = ({
   iconColor,
   url,
   collapse = false,
+  onClick,
 }) => {
   return collapse ? (
     <Link
@@ -23,6 +24,7 @@ const NavButton = ({
   ) : (
     <Link
       href={url}
+      onClick={onClick}
       className={`items-center justify-start flex py-[13px] pl-[16px] shrink-0  gap-[10px] w-[184px] h-[48px] transition-all duration-300 ${
         !active
           ? 'text-chill-white  flex  rounded-full'

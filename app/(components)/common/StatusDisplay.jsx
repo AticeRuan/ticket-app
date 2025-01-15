@@ -24,7 +24,7 @@ const StatusDisplay = ({ status }) => {
 
   return (
     <span
-      className={`inline-block rounded-full capitalize px-2 py-1 text-xs  whitespace-nowrap ${getColor(
+      className={`inline-block rounded-full capitalize px-2 py-1 text-xs w-fit whitespace-nowrap ${getColor(
         status,
       )}`}
     >
