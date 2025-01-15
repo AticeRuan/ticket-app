@@ -67,7 +67,7 @@ const Dashboard = () => {
     }
   }).reverse()
 
-  const COLORS = ['#E65F2B', '#060606', '#EBDFD7', '#f1f1f1']
+  const COLORS = ['#14b8a6', '#facc15', '#E65F2B', '#060606']
 
   return (
     <div className="p-6 space-y-6">
