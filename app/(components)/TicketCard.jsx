@@ -136,14 +136,14 @@ const TicketCard = ({ ticket }) => {
               onClick={handleViewTicket}
               className="flex-1 px-4 py-2 bg-chill-orange text-white rounded-md  hover:rounded-full hover:bg-chill-orange/90 transition-[border-radius] active:scale-95 duration-500 text-sm "
             >
-              View Details
+              View
             </button>
             {ticket.status === 'Open' && !ticket.owner && (
               <button
                 onClick={() => setIsClaimModalOpen(true)}
                 className="flex-1 px-4 py-2 bg-blue-green-600 text-white rounded-md hover:shadow-lg hover:rounded-full transition-all duration-500 active:scale-95 bg-gradient-to-r from-blue-500 to-emerald-500  text-sm "
               >
-                Claim Ticket
+                Claim
               </button>
             )}
           </div>
