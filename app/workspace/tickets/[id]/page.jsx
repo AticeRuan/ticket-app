@@ -12,11 +12,13 @@ import { icons } from '../../../(utils)/constants'
 import Loading from '../../../(components)/common/Loading'
 import PriorityDisplay from '../../../(components)/PriorityDisplay'
 import StatusDisplay from '../../../(components)/StatusDisplay'
+import { useUserContext } from '../../../(context)/UserContext'
 
 const SingleTicketPage = ({ params }) => {
   const { tickets, updateTicket, loading: ticketLoading } = useTicketContext()
   const { projects } = useProjectContext()
   const { user } = useAuthContext()
+  const { users } = useUserContext()
   const [ticket, setTicket] = useState(null)
   const [project, setProject] = useState(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -24,7 +26,29 @@ const SingleTicketPage = ({ params }) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const router = useRouter()
+  const [ownerName, setOwnerName] = useState('Unassigned')
+  useEffect(() => {
+    // Only run if ticket exists
+    if (!ticket) return
 
+    const fetchOwnerName = () => {
+      if (!ticket.owner || !users?.length) {
+        setOwnerName('Unassigned')
+        return
+      }
+
+      const owner = users.find((user) => user._id === ticket.owner)
+      if (owner?.name) {
+        setOwnerName(owner.name)
+      } else {
+        setOwnerName('Unassigned')
+      }
+    }
+
+    fetchOwnerName()
+  }, [ticket, users]) // Change dependency to ticket instead of ticket.owner
+
+  // Fetch ticket and project effect remains the same
   useEffect(() => {
     const fetchTicketAndProject = async () => {
       try {
@@ -65,19 +89,22 @@ const SingleTicketPage = ({ params }) => {
 
   const handleClaimTicket = async () => {
     try {
-      const updatedTicket = {
+      // Construct update data maintaining all existing ticket fields
+      const updatedTicketData = {
         ...ticket,
-        owner: {
-          id: user.userId,
-          name: user.name,
-        },
+        status: 'In Progress',
+        owner: user.userId,
       }
-      await updateTicket(ticket._id, updatedTicket)
-      setTicket(updatedTicket)
+
+      await updateTicket(ticket._id, updatedTicketData)
       setIsClaimModalOpen(false)
+
+      // Fetch tickets to update the UI with the latest data
+      if (typeof fetchTickets === 'function') {
+        await fetchTickets()
+      }
     } catch (err) {
       console.error('Error claiming ticket:', err)
-      setError('Failed to claim ticket')
     }
   }
 
@@ -191,9 +218,7 @@ const SingleTicketPage = ({ params }) => {
 
           <div className="flex flex-col">
             <span className="text-gray-500 text-sm">Owner</span>
-            <span className="font-medium">
-              {ticket.owner?.name || 'Unassigned'}
-            </span>
+            <span className="font-medium">{ownerName || 'Unassigned'}</span>
           </div>
         </div>
 

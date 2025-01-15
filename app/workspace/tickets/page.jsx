@@ -70,7 +70,7 @@ const TicketPage = () => {
           )
 
         const matchesOwner = showOnlyMyTickets
-          ? ticket.owner?.id === user?.userId
+          ? ticket.owner === user?.userId
           : true
 
         return matchesCategory && matchesStatus && matchesSearch && matchesOwner

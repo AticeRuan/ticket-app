@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import DeleteBlock from './DeleteBlock'
 import PriorityDisplay from './PriorityDisplay'
 import StatusDisplay from './StatusDisplay'
@@ -9,13 +9,32 @@ import { useTicketContext } from '../(context)/TicketContext'
 import { useAuthContext } from '../(context)/AuthContext'
 import Modal from './common/Modal'
 import TicketOwner from '../(components)/TicketOwner'
+import { useUserContext } from '../(context)/UserContext'
 
 const TicketCard = ({ ticket }) => {
   const router = useRouter()
   const { updateTicket } = useTicketContext()
   const { user } = useAuthContext()
+  const { users } = useUserContext()
+  const [ownerName, setOwnerName] = useState('Unassigned')
+  useEffect(() => {
+    const fetchOwnerName = () => {
+      if (!ticket.owner || !users?.length) {
+        setOwnerName('Unassigned')
+        return
+      }
 
-  console.log('user at ticket', user)
+      const owner = users.find((user) => user._id === ticket.owner)
+      if (owner?.name) {
+        setOwnerName(owner.name)
+      } else {
+        setOwnerName('Unassigned')
+      }
+    }
+
+    fetchOwnerName()
+  }, [ticket.owner, users])
+
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
   if (!ticket) return null //
   const getStatusColor = (status) => {
@@ -51,8 +70,6 @@ const TicketCard = ({ ticket }) => {
         status: 'In Progress',
         owner: user.userId,
       }
-
-      console.log('updatedTicketData at frontend:', updatedTicketData)
 
       await updateTicket(ticket._id, updatedTicketData)
       setIsClaimModalOpen(false)
@@ -107,7 +124,7 @@ const TicketCard = ({ ticket }) => {
               </div>
             </div>
 
-            <TicketOwner owner={ticket.owner} />
+            <TicketOwner owner={ownerName} />
           </div>
 
           <div className="flex justify-center items-start flex-col text-xs text-gray-500">

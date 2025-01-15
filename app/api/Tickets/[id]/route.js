@@ -1,7 +1,7 @@
 import Ticket from '../../../(models)/ticket'
 import { NextResponse } from 'next/server'
 import { verifyJWT } from '../../(middlewares)/verifyJWT'
-
+import mongoose from 'mongoose'
 export async function GET(req, { params }) {
   const authResponse = await verifyJWT(req)
   if (authResponse.status === 401) {
@@ -39,9 +39,9 @@ export async function PUT(req, { params }) {
       project: ticketData.project
         ? new mongoose.Types.ObjectId(ticketData.project)
         : null,
-      owner: ticketData.owner
-        ? new mongoose.Types.ObjectId(ticketData.owner)
-        : null,
+    }
+    if (ticketData.owner) {
+      updateData.owner = new mongoose.Types.ObjectId(ticketData.owner)
     }
 
     console.log('Update data being sent to MongoDB:', updateData)
