@@ -9,6 +9,7 @@ import Card from '../../../(components)/common/Card'
 import { icons } from '../../../(utils)/constants'
 import { useRouter } from 'next/navigation'
 import Loading from '../../../(components)/common/Loading'
+import ErrorDisplay from '../../../(components)/common/ErrorDisplay'
 
 const SingleProjectPage = ({ params }) => {
   const {
@@ -94,8 +95,8 @@ const SingleProjectPage = ({ params }) => {
 
   if (error)
     return (
-      <div className="flex items-center justify-center h-full">
-        <div className="text-lg text-red-600">Error: {error}</div>
+      <div className="flex justify-center items-center h-full">
+        <ErrorDisplay messages={[error]} />
       </div>
     )
 

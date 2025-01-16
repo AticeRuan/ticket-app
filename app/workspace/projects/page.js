@@ -7,6 +7,7 @@ import CreateButton from '../../(components)/common/CreateButton'
 import { useRouter } from 'next/navigation'
 import Card from '../../(components)/common/Card'
 import { icons } from '../../(utils)/constants'
+import ErrorDisplay from '../../(components)/common/ErrorDisplay'
 
 const ProjectPage = () => {
   const { projects, loading, error, fetchProjects, createProject } =
@@ -144,9 +145,9 @@ const ProjectPage = () => {
 
   if (error) {
     return (
-      <Card className="w-full p-4">
-        <div className="text-red-500">Error loading projects: {error}</div>
-      </Card>
+      <div className="flex justify-center items-center h-full">
+        <ErrorDisplay messages={[error]} />
+      </div>
     )
   }
 

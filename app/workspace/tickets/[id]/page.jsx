@@ -13,6 +13,7 @@ import Loading from '../../../(components)/common/Loading'
 import PriorityDisplay from '../../../(components)/common/PriorityDisplay'
 import StatusDisplay from '../../../(components)/common/StatusDisplay'
 import { useUserContext } from '../../../(context)/UserContext'
+import ErrorDisplay from '../../../(components)/common/ErrorDisplay'
 
 const SingleTicketPage = ({ params }) => {
   const { tickets, updateTicket, loading: ticketLoading } = useTicketContext()
@@ -125,8 +126,8 @@ const SingleTicketPage = ({ params }) => {
   if (loading) return <Loading />
   if (error)
     return (
-      <div className="flex items-center justify-center h-full">
-        <div className="text-lg text-red-600">Error: {error}</div>
+      <div className="flex justify-center items-center h-full">
+        <ErrorDisplay messages={[error]} />
       </div>
     )
   if (!ticket)

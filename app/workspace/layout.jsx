@@ -1,9 +1,9 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import CustomHeader from '../(components)/CustomHeader'
 import Nav from '../(components)/Nav'
 import { useAuthContext } from '../(context)/AuthContext'
-
+import ErrorDisaply from '../(components)/common/ErrorDisplay'
 import { useTicketContext } from '../(context)/TicketContext'
 import { useProjectContext } from '../(context)/ProjectContext'
 import { useUserContext } from '../(context)/UserContext'
@@ -12,14 +12,32 @@ import Modal from '../(components)/common/Modal'
 import { LoginForm, SignupForm } from '../(components)/AuthForm'
 
 const WorkspaceLayout = ({ children }) => {
-  const { user, loading: authLoading, isAuthenticated } = useAuthContext()
-  const { fetchUsers, loading: usersLoading } = useUserContext()
-  const { fetchTickets, loading: ticketsLoading } = useTicketContext()
-  const { fetchProjects, loading: projectsLoading } = useProjectContext()
+  const {
+    user,
+    loading: authLoading,
+    isAuthenticated,
+    error: errorAuth,
+  } = useAuthContext()
+  const {
+    fetchUsers,
+    loading: usersLoading,
+    error: usersError,
+  } = useUserContext()
+  const {
+    fetchTickets,
+    loading: ticketsLoading,
+    error: ticketsError,
+  } = useTicketContext()
+  const {
+    fetchProjects,
+    loading: projectsLoading,
+    error: projectsError,
+  } = useProjectContext()
 
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [isLoginForm, setIsLoginForm] = useState(true)
   const [loadingMessage, setLoadingMessage] = useState('')
+  const [error, setError] = useState([])
 
   useEffect(() => {
     if (usersLoading) {
@@ -38,6 +56,24 @@ const WorkspaceLayout = ({ children }) => {
       setLoadingMessage('Authenticating User')
     }
   }, [usersLoading, ticketsLoading, projectsLoading, authLoading])
+
+  useEffect(() => {
+    if (errorAuth) {
+      setError([...error, errorAuth])
+    }
+    if (usersError) {
+      setError([...error, usersError])
+    }
+    if (ticketsError) {
+      setError([...error, ticketsError])
+    }
+    if (projectsError) {
+      setError([...error, projectsError])
+    }
+    if (!errorAuth && !usersError && !ticketsError && !projectsError) {
+      setError([])
+    }
+  }, [errorAuth, usersError, ticketsError, projectsError])
   useEffect(() => {
     // If not authenticated and not loading, show auth modal
     if (!authLoading && !isAuthenticated) {
@@ -56,6 +92,10 @@ const WorkspaceLayout = ({ children }) => {
       fetchData()
     }
   }, [user, isAuthenticated])
+
+  const handleAuthFormSwitch = (formType) => {
+    setIsLoginForm(formType === 'login')
+  }
   // Show loading while initial data is being fetched
   if (authLoading) {
     return (
@@ -74,8 +114,12 @@ const WorkspaceLayout = ({ children }) => {
     )
   }
 
-  const handleAuthFormSwitch = (formType) => {
-    setIsLoginForm(formType === 'login')
+  if (error.length > 0) {
+    return (
+      <div className="w-screen flex justify-center items-center bg-gradient-radial from-chill-light-orange to-white flex-col">
+        <ErrorDisaply message={error} />
+      </div>
+    )
   }
 
   return (
@@ -110,7 +154,7 @@ const WorkspaceLayout = ({ children }) => {
         )}
       </Modal>
       <Nav />
-      <div className="flex-grow flex flex-col overflow-y-auto bg-chill-light-orange h-full pt-[100px]">
+      <div className="flex-grow flex flex-col overflow-y-auto bg-chill-light-orange h-full sm:pt-[20px] pt-[100px]">
         <CustomHeader />
         {children}
       </div>

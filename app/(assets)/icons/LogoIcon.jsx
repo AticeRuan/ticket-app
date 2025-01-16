@@ -24,6 +24,7 @@ const LogoIcon = (props = {}) => {
         rx="15"
         ry="15"
         fill={collapsed ? '#ffffff' : '#E65F2B'}
+        className="transition-all duration-1000 delay-200"
       />
 
       <path
@@ -38,6 +39,7 @@ const LogoIcon = (props = {}) => {
              Z"
         fill={collapsed ? '#E65F2B' : '#060606'}
         strokeWidth="2"
+        className="transition-all duration-1000 delay-200"
       />
     </svg>
   )

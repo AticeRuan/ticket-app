@@ -7,6 +7,7 @@ import Modal from '../../(components)/common/Modal'
 import { icons } from '../../(utils)/constants'
 import Loading from '../../(components)/common/Loading'
 import { useAuthContext } from '../../(context)/AuthContext'
+import ErrorDisplay from '../../(components)/common/ErrorDisplay'
 
 const TicketPage = () => {
   const { tickets, loading, error } = useTicketContext()
@@ -117,8 +118,8 @@ const TicketPage = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <div className="text-lg text-red-600">Error: {error}</div>
+      <div className="flex justify-center items-center h-full">
+        <ErrorDisplay messages={[error]} />
       </div>
     )
   }

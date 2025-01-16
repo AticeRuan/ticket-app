@@ -64,7 +64,9 @@ export default function LandingPage() {
         <nav className="flex gap-6">
           {isAuthenticated ? (
             <div className="flex gap-1 flex-col items-end justify-center ">
-              <p className="text-xs sm:text-sm">Welcome back {user.name}!</p>
+              <p className="text-xs sm:text-sm whitespace-nowrap">
+                Welcome back {user.name}!
+              </p>
               <Link
                 href="/workspace/dashboard"
                 className="hover:text-chill-orange bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-emerald-500 transition-all duration-700 p-1 rounded-md sm:text-base"
