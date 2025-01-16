@@ -14,6 +14,7 @@ import PriorityDisplay from '../../../(components)/common/PriorityDisplay'
 import StatusDisplay from '../../../(components)/common/StatusDisplay'
 import { useUserContext } from '../../../(context)/UserContext'
 import ErrorDisplay from '../../../(components)/common/ErrorDisplay'
+import { set } from 'mongoose'
 
 const SingleTicketPage = ({ params }) => {
   const { tickets, updateTicket, loading: ticketLoading } = useTicketContext()
@@ -28,6 +29,7 @@ const SingleTicketPage = ({ params }) => {
   const [error, setError] = useState(null)
   const router = useRouter()
   const [ownerName, setOwnerName] = useState('Unassigned')
+  const [loadingMessage, setLoadingMessage] = useState('Loading ticket...')
 
   useEffect(() => {
     if (!ticket) return
@@ -54,6 +56,7 @@ const SingleTicketPage = ({ params }) => {
       try {
         const foundTicket = tickets.find((t) => t._id === params.id)
         if (foundTicket) {
+          setLoadingMessage('Loading ticket...')
           setTicket(foundTicket)
           if (foundTicket.project) {
             const foundProject = projects.find(
@@ -78,6 +81,7 @@ const SingleTicketPage = ({ params }) => {
 
   const handleUpdateTicket = async (formData) => {
     try {
+      setLoadingMessage('Updating ticket...')
       await updateTicket(ticket._id, formData)
       setTicket({ ...ticket, ...formData })
       setIsEditModalOpen(false)
@@ -88,6 +92,7 @@ const SingleTicketPage = ({ params }) => {
   }
 
   const handleClaimTicket = async () => {
+    setLoadingMessage('Claiming ticket...')
     try {
       const updatedTicketData = {
         ...ticket,
@@ -123,7 +128,12 @@ const SingleTicketPage = ({ params }) => {
       user.role === 'admin')
   const canClaim = user && ticket?.status === 'Open' && !ticket?.owner
 
-  if (loading) return <Loading />
+  if (loading)
+    return (
+      <div className="w-screen flex justify-center items-center bg-gradient-radial from-chill-light-orange to-white flex-col">
+        <Loading message={loadingMessage} />
+      </div>
+    )
   if (error)
     return (
       <div className="flex justify-center items-center h-full">

@@ -10,6 +10,7 @@ import { icons } from '../../../(utils)/constants'
 import { useRouter } from 'next/navigation'
 import Loading from '../../../(components)/common/Loading'
 import ErrorDisplay from '../../../(components)/common/ErrorDisplay'
+import { set } from 'mongoose'
 
 const SingleProjectPage = ({ params }) => {
   const {
@@ -25,10 +26,12 @@ const SingleProjectPage = ({ params }) => {
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [loadingMessage, setLoadingMessage] = useState('')
   const router = useRouter()
 
   useEffect(() => {
     const fetchProject = async () => {
+      setLoadingMessage('Loading project...')
       try {
         const data = await getProjectById(params.id)
         setProject(data.project)
@@ -43,6 +46,7 @@ const SingleProjectPage = ({ params }) => {
   }, [params.id])
 
   const handleUpdateProject = async (formData) => {
+    setLoadingMessage('Updating project...')
     try {
       await updateProject(project._id, formData)
       setProject({ ...project, ...formData })
@@ -55,10 +59,11 @@ const SingleProjectPage = ({ params }) => {
 
   const handleDeleteProject = async () => {
     if (deleteConfirmText !== project.name) return
-
+    setLoadingMessage('Deleting project...')
     try {
       await deleteProject(project._id)
       await fetchTickets()
+
       router.push('/workspace/projects')
     } catch (err) {
       console.error('Error deleting project:', err)
@@ -91,7 +96,12 @@ const SingleProjectPage = ({ params }) => {
     return colors[status] || 'bg-gray-100 text-gray-800'
   }
 
-  if (loading) return <Loading />
+  if (loading)
+    return (
+      <div className="w-screen flex justify-center items-center bg-gradient-radial from-chill-light-orange to-white flex-col">
+        <Loading message={loadingMessage} />
+      </div>
+    )
 
   if (error)
     return (
