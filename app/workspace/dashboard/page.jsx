@@ -27,7 +27,8 @@ const workloadData = [
   { name: 'Kadin', workload: 2 },
   { name: 'Melm', workload: 4 },
 ]
-
+import { Suspense } from 'react'
+import { lazy } from 'react'
 const Dashboard = () => {
   const { tickets } = useTicketContext()
   const { projects } = useProjectContext()
