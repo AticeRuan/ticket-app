@@ -5,6 +5,7 @@ import { useAuthContext } from '../(context)/AuthContext'
 import Card from '../(components)/common/Card'
 import { icons } from '../(utils)/constants'
 import Modal from '../(components)/common/Modal'
+import ErrorDisplay from './common/ErrorDisplay'
 
 const UserManagementPage = () => {
   const { users, resetPassword, changeUserRole, loading, error, deleteUser } =
