@@ -68,7 +68,7 @@ export async function PATCH(req, { params }) {
       case 'changeRole':
         const { role } = data
         // Validate role
-        if (!['user', 'admin', 'manager'].includes(role)) {
+        if (!['team member', 'admin', 'manager'].includes(role)) {
           return NextResponse.json({ message: 'Invalid role' }, { status: 400 })
         }
 

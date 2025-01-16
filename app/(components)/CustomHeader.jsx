@@ -12,7 +12,6 @@ const CustomHeader = () => {
   const pathname = usePathname()
   const text = pathname.split('/')[2] || 'Dashboard'
   const { user, logout } = useAuthContext()
-  const router = useRouter()
   const [userName, setUserName] = useState('?')
   const [email, setEmail] = useState('')
 
