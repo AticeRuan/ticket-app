@@ -153,14 +153,17 @@ const ProjectPage = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center relative group">
         <h1 className="text-2xl text-chill-black/80">Projects Overview</h1>
         <CreateButton
           onClick={() => setIsModalOpen(true)}
           text="New Project"
           className="bg-chill-orange text-white"
           collapse={true}
-        />
+        />{' '}
+        <span className="absolute px-2 py-1 rounded-lg border bg-chill-black/20 text-xs border-chill-black/80 backdrop-blur-md shadow-xl text-chill-black/80 top-[50px] right-[0px] hidden  group-hover:block z-30">
+          New Project
+        </span>
       </div>
 
       <Card className="w-full overflow-hidden">
